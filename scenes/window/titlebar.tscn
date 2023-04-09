@@ -1,0 +1,157 @@
+[gd_scene load_steps=8 format=3 uid="uid://27qvlhwvmob7"]
+
+[ext_resource type="Script" path="res://scripts/window/titlebar.gd" id="1_nhn4r"]
+[ext_resource type="FontFile" uid="uid://cjn6x6n8nolq" path="res://assets/fonts/JetBrainsMono-Regular.ttf" id="2_bocwy"]
+[ext_resource type="Texture2D" uid="uid://cur5byxhcoa6m" path="res://assets/icons/minimize.svg" id="2_swjwa"]
+[ext_resource type="Texture2D" uid="uid://dxe5bmqq2jrlu" path="res://assets/icons/pin.svg" id="3_4bygk"]
+[ext_resource type="Texture2D" uid="uid://cpttutd1yhxjv" path="res://assets/icons/maximize.svg" id="3_p5377"]
+[ext_resource type="Texture2D" uid="uid://cw24x4nl11pr4" path="res://assets/icons/close.svg" id="4_gyo8s"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_cacg3"]
+line_spacing = 0.0
+font = ExtResource("2_bocwy")
+font_size = 15
+
+[node name="titlebar" type="Control"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+script = ExtResource("1_nhn4r")
+
+[node name="background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(0.196078, 0.231373, 0.45098, 1)
+
+[node name="pin" type="TextureButton" parent="."]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 0
+offset_right = 35.0
+offset_bottom = 30.0
+mouse_default_cursor_shape = 2
+toggle_mode = true
+texture_normal = ExtResource("3_4bygk")
+stretch_mode = 3
+
+[node name="background" type="ColorRect" parent="pin"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="active_background" type="ColorRect" parent="pin"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -15.0
+offset_top = -12.5
+offset_right = 14.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="title" type="Label" parent="."]
+layout_mode = 0
+offset_left = 42.0
+offset_top = 5.0
+offset_right = 185.0
+offset_bottom = 28.0
+auto_translate = false
+localize_numeral_system = false
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "chalk."
+label_settings = SubResource("LabelSettings_cacg3")
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="buttons" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(105, 30)
+layout_direction = 2
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -105.0
+offset_bottom = 30.0
+grow_horizontal = 0
+theme_override_constants/separation = 0
+alignment = 2
+
+[node name="minimize" type="TextureButton" parent="buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture_normal = ExtResource("2_swjwa")
+stretch_mode = 3
+
+[node name="background" type="ColorRect" parent="buttons/minimize"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="maximize" type="TextureButton" parent="buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture_normal = ExtResource("3_p5377")
+stretch_mode = 3
+
+[node name="background" type="ColorRect" parent="buttons/maximize"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="close" type="TextureButton" parent="buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture_normal = ExtResource("4_gyo8s")
+stretch_mode = 3
+
+[node name="background" type="ColorRect" parent="buttons/close"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[connection signal="gui_input" from="background" to="." method="_on_background_gui_input"]
+[connection signal="mouse_entered" from="pin" to="." method="_on_pin_mouse_entered"]
+[connection signal="mouse_exited" from="pin" to="." method="_on_pin_mouse_exited"]
+[connection signal="toggled" from="pin" to="." method="_on_pin_toggled"]
+[connection signal="mouse_entered" from="buttons/minimize" to="." method="_on_minimize_mouse_entered"]
+[connection signal="mouse_exited" from="buttons/minimize" to="." method="_on_minimize_mouse_exited"]
+[connection signal="pressed" from="buttons/minimize" to="." method="_on_minimize_pressed"]
+[connection signal="mouse_entered" from="buttons/maximize" to="." method="_on_maximize_mouse_entered"]
+[connection signal="mouse_exited" from="buttons/maximize" to="." method="_on_maximize_mouse_exited"]
+[connection signal="pressed" from="buttons/maximize" to="." method="_on_maximize_pressed"]
+[connection signal="mouse_entered" from="buttons/close" to="." method="_on_close_mouse_entered"]
+[connection signal="mouse_exited" from="buttons/close" to="." method="_on_close_mouse_exited"]
+[connection signal="pressed" from="buttons/close" to="." method="_on_close_pressed"]

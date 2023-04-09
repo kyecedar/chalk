@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://ctgso7sr0ql57"]
+
+[ext_resource type="Script" path="res://scripts/window/view.gd" id="1_haks4"]
+[ext_resource type="PackedScene" uid="uid://colxabte1sgm7" path="res://scenes/world.tscn" id="2_ttujh"]
+
+[node name="view" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+script = ExtResource("1_haks4")
+
+[node name="container" type="SubViewportContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="viewport" type="SubViewport" parent="container"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(900, 700)
+render_target_update_mode = 4
+
+[node name="world" parent="container/viewport" instance=ExtResource("2_ttujh")]
+
+[connection signal="item_rect_changed" from="." to="." method="_on_item_rect_changed"]

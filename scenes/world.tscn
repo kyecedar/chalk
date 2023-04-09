@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://colxabte1sgm7"]
+
+[ext_resource type="Script" path="res://scripts/world.gd" id="1_56kru"]
+[ext_resource type="Shader" path="res://shaders/grid.gdshader" id="1_t8fcj"]
+[ext_resource type="Script" path="res://scripts/grid.gd" id="3_b4vgl"]
+[ext_resource type="Texture2D" uid="uid://iduf2onifuft" path="res://assets/grid/solid.png" id="3_vubba"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r5cfs"]
+shader = ExtResource("1_t8fcj")
+shader_parameter/primary = null
+shader_parameter/secondary = null
+shader_parameter/opacity = 1.0
+shader_parameter/min_opacity = 0.25
+shader_parameter/offset = Vector2(-450, -350)
+shader_parameter/radius = 300
+shader_parameter/grid_texture = ExtResource("3_vubba")
+
+[node name="world" type="Node2D"]
+script = ExtResource("1_56kru")
+
+[node name="grid" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_r5cfs")
+offset_left = -450.0
+offset_top = -350.0
+offset_right = 450.0
+offset_bottom = 350.0
+texture = ExtResource("3_vubba")
+stretch_mode = 1
+script = ExtResource("3_b4vgl")
+
+[node name="grid_center" type="ColorRect" parent="."]
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 5.0
+offset_bottom = 5.0
+color = Color(0, 0, 0, 1)
+
+[node name="camera" type="Camera2D" parent="."]
