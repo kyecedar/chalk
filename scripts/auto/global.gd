@@ -6,6 +6,14 @@ extends Node
 ## VARIABLES ##
 ###############
 
+enum Type {
+	NOTE_MEMO,
+	NOTE_PAGE,
+	NOTE_IMAGE,
+	NOTE_FOLDER,
+	NOTE_LIST,
+}
+
 var themes : Array = [
 	{
 		"name": "theme 1.",

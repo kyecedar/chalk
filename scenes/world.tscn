@@ -9,9 +9,9 @@
 shader = ExtResource("1_t8fcj")
 shader_parameter/primary = null
 shader_parameter/secondary = null
-shader_parameter/opacity = 1.0
-shader_parameter/min_opacity = 0.25
-shader_parameter/offset = Vector2(-450, -350)
+shader_parameter/opacity = 0.8
+shader_parameter/min_opacity = 0.05
+shader_parameter/offset = Vector2(-960, -528.5)
 shader_parameter/radius = 300
 shader_parameter/grid_texture = ExtResource("3_vubba")
 

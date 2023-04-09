@@ -6,7 +6,9 @@ extends Node2D
 ## VARIABLES ##
 ###############
 
-@export var zoom_inc : float = 0.5
+@export var zoom_increment : float = 0.5
+@export var zoom_min       : float = 0.5
+@export var zoom_max       : float = 5.0
 
 @onready var grid        : TextureRect = $grid
 @onready var grid_center : ColorRect   = $grid_center
@@ -60,18 +62,21 @@ func _on_theme_change():
 
 
 
+func resizeGrid():
+	grid.size = Vector2(DisplayServer.window_get_size()) / camera.zoom
+
+
 func zoom(pos, inc):
-	camera.zoom += Vector2(inc * zoom_inc, inc * zoom_inc)
+	var z = inc * zoom_increment
 	
-	print(grid.size)
+	camera.zoom.x =  clamp(camera.zoom.x + z, zoom_min, zoom_max)
+	camera.zoom.y =  camera.zoom.x
 	
-	if camera.zoom.x <= 0.7:
+	if camera.zoom.x < 1:
 		grid.texture = grid_solid_thick
 		grid.material.set_shader_parameter("grid_texture", grid_solid_thick)
 	else:
 		grid.texture = grid_solid
 		grid.material.set_shader_parameter("grid_texture", grid_solid)
-
-
-func _on_view_item_rect_changed():
-	pass # Replace with function body.
+	
+	resizeGrid()
