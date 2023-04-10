@@ -20,6 +20,11 @@ enum SIDE {
 
 var following  := false
 var drag_start := Vector2i()
+var min_size   := Vector2i()
+var win_size   := Vector2i()
+var win_tl     := Vector2i()
+var win_br     := Vector2i()
+
 
 
 
@@ -38,11 +43,16 @@ func drag(event: InputEvent, side: SIDE) -> void:
 		if Input.is_action_just_pressed("mouse_left"):
 			following = true
 			drag_start = get_local_mouse_position()
+			min_size = DisplayServer.window_get_min_size()
+			win_size = DisplayServer.window_get_size()
+			win_tl   = DisplayServer.window_get_position_with_decorations()
+			win_br   = win_tl + win_size
 		if Input.is_action_just_released("mouse_left"):
 			following = false
 	
 	elif event is InputEventMouseMotion && following:
-		print(get_local_mouse_position())
+		var drag_vec := Vector2i(get_local_mouse_position()) - drag_start
+		var new_size : Vector2i
 		
 		match side:
 			SIDE.TL:
@@ -54,13 +64,20 @@ func drag(event: InputEvent, side: SIDE) -> void:
 			SIDE.L:
 				pass
 			SIDE.R:
-				pass
+				drag_vec.y = 0 # ignore y.
+				new_size = win_size + drag_vec
 			SIDE.BL:
 				pass
 			SIDE.B:
-				pass
+				drag_vec.x = 0 # ignore x.
+				new_size = win_size + drag_vec
 			SIDE.BR:
-				pass
+				new_size = win_size + drag_vec
+		
+		new_size.x = max(new_size.x, min_size.x) # keep above minimum
+		new_size.y = max(new_size.y, min_size.y) # keep above minimum
+		
+		DisplayServer.window_set_size(new_size)
 
 
 #func _on_background_gui_input(event) -> void:

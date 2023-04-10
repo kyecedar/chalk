@@ -11,6 +11,8 @@ extends Control
 ## VARIABLES ##
 ###############
 
+@export var min_size    := Vector2(300, 330)
+
 @onready var content    := $content
 @onready var background := $background
 @onready var resize     := $resize_margins
@@ -20,6 +22,7 @@ var drag_margins := Vector2i(2, 2)
 
 
 func _ready() -> void:
+	DisplayServer.window_set_min_size(min_size)
 	chalk.onThemeChange(_on_theme_change)
 	chalk.changeTheme(chalk.selected_theme)
 
