@@ -44,14 +44,16 @@ func _process(delta):
 		
 		match drag_side:
 			SIDE.TL:
-				pass
-			SIDE.T:
-				pass
-			SIDE.TR:
-				pass
-			SIDE.L:
-				drag_vec.y = 0
 				new_size -= drag_vec
+				new_pos  += drag_vec
+			SIDE.T:
+				new_size.y -= drag_vec.y
+				new_pos.y += drag_vec.y
+			SIDE.TR:
+				new_size = Vector2i(win_size.x + drag_vec.x, new_size.y - drag_vec.y)
+				new_pos.y += drag_vec.y
+			SIDE.L:
+				new_size.x -= drag_vec.x
 				new_pos.x += drag_vec.x
 			SIDE.R:
 				drag_vec.y = 0 # ignore y.
