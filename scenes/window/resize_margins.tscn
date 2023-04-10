@@ -1,0 +1,104 @@
+[gd_scene load_steps=2 format=3 uid="uid://b1n04gis8c667"]
+
+[ext_resource type="Script" path="res://scripts/window/resize_margins.gd" id="1_nf0rn"]
+
+[node name="resize_margins" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_nf0rn")
+
+[node name="top" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+mouse_default_cursor_shape = 9
+
+[node name="bottom" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_default_cursor_shape = 9
+
+[node name="left" type="Control" parent="."]
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+grow_vertical = 2
+mouse_default_cursor_shape = 10
+
+[node name="right" type="Control" parent="."]
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_default_cursor_shape = 10
+
+[node name="tl" type="Control" parent="."]
+custom_minimum_size = Vector2(3, 3)
+layout_mode = 1
+anchors_preset = 0
+offset_right = 5.0
+offset_bottom = 5.0
+mouse_default_cursor_shape = 12
+
+[node name="tr" type="Control" parent="."]
+custom_minimum_size = Vector2(5, 5)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -5.0
+offset_bottom = 5.0
+grow_horizontal = 0
+mouse_default_cursor_shape = 11
+
+[node name="bl" type="Control" parent="."]
+custom_minimum_size = Vector2(5, 5)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -5.0
+offset_right = 5.0
+grow_vertical = 0
+mouse_default_cursor_shape = 11
+
+[node name="br" type="Control" parent="."]
+custom_minimum_size = Vector2(5, 5)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -5.0
+offset_top = -5.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 12
+
+[connection signal="gui_input" from="top" to="." method="_on_top_gui_input"]
+[connection signal="gui_input" from="bottom" to="." method="_on_bottom_gui_input"]
+[connection signal="gui_input" from="left" to="." method="_on_left_gui_input"]
+[connection signal="gui_input" from="right" to="." method="_on_right_gui_input"]
+[connection signal="gui_input" from="tl" to="." method="_on_tl_gui_input"]
+[connection signal="gui_input" from="tr" to="." method="_on_tr_gui_input"]
+[connection signal="gui_input" from="bl" to="." method="_on_bl_gui_input"]
+[connection signal="gui_input" from="br" to="." method="_on_br_gui_input"]
