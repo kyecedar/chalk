@@ -142,6 +142,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="gui_input" from="background" to="." method="_on_background_gui_input"]
 [connection signal="mouse_entered" from="pin" to="." method="_on_pin_mouse_entered"]
 [connection signal="mouse_exited" from="pin" to="." method="_on_pin_mouse_exited"]

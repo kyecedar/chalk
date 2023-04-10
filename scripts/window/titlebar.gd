@@ -26,10 +26,10 @@ var right_size = button_width * 3 + title_padding
 
 var maximized       := false
 var following       := false
-var drag_start      := Vector2i()
+var drag_start      := Vector2()
 var drag_fullscreen := false
-var last_pos        := Vector2i()
-var last_size       := Vector2i()
+var last_pos        := Vector2()
+var last_size       := Vector2()
 var pin_toggle      := false
 
 var tobemaximized    := false
@@ -48,7 +48,7 @@ func _ready() -> void:
 
 func _process(_delta) -> void:
 	if following:
-		DisplayServer.window_set_position(DisplayServer.window_get_position() + Vector2i(get_global_mouse_position()) - drag_start)
+		DisplayServer.window_set_position(DisplayServer.window_get_position() + Vector2i(get_global_mouse_position() - drag_start))
 	elif tobemaximized:
 		if last_window_mode == DisplayServer.WINDOW_MODE_MINIMIZED && DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_WINDOWED:
 			_on_maximize_pressed()
@@ -86,7 +86,7 @@ func _on_background_gui_input(event) -> void:
 			
 			if mode == DisplayServer.WINDOW_MODE_FULLSCREEN or mode == DisplayServer.WINDOW_MODE_MAXIMIZED:
 				drag_start.x -= left_size
-				drag_start = Vector2i(
+				drag_start = Vector2(
 					round((last_size.x - left_size - right_size) * (float(drag_start.x) / (DisplayServer.window_get_size().x - left_size - right_size))),
 					drag_start.y)
 				drag_start.x += left_size
