@@ -11,7 +11,7 @@ shader_parameter/primary = null
 shader_parameter/secondary = null
 shader_parameter/opacity = 0.8
 shader_parameter/min_opacity = 0.05
-shader_parameter/offset = Vector2(-960, -528.5)
+shader_parameter/offset = Vector2(-450, -350)
 shader_parameter/radius = 300
 shader_parameter/grid_texture = ExtResource("3_vubba")
 
@@ -34,5 +34,11 @@ offset_top = -4.0
 offset_right = 5.0
 offset_bottom = 5.0
 color = Color(0, 0, 0, 1)
+
+[node name="notes" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="camera" type="Camera2D" parent="."]

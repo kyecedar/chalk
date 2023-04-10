@@ -17,8 +17,8 @@ enum Type {
 var themes : Array = [
 	{
 		"name": "theme 1.",
-		"primary"   : "3e574f", # Outer Space
-		"secondary" : "c1cd96", # Spring Green
+		"primary"   : "c1cd96", # Spring Green
+		"secondary" : "3e574f", # Outer Space
 	},
 	{
 		"name": "theme 2.",
@@ -37,19 +37,19 @@ var themes : Array = [
 	},
 	{
 		"name": "theme 5.",
-		"primary"   : "000000",
-		"secondary" : "d2ba60",
+		"primary"   : "d2ba60",
+		"secondary" : "000000",
 	},
 	{
 		"name": "theme 6.",
-		"primary"   : "000000",
-		"secondary" : "3dabe8",
+		"primary"   : "3dabe8",
+		"secondary" : "000000",
 	},
 ]
 
 @export var selected_theme : int = 3
-var theme_invert   := true
-var theme          : Dictionary
+var theme_invert := false
+var theme        : Dictionary
 
 var theme_callbacks : Array[Callable] = []
 

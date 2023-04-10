@@ -24,12 +24,16 @@ extends Control
 var left_size = button_width + title_padding
 var right_size = button_width * 3 + title_padding
 
+var maximized       := false
 var following       := false
 var drag_start      := Vector2i()
 var drag_fullscreen := false
 var last_pos        := Vector2i()
 var last_size       := Vector2i()
 var pin_toggle      := false
+
+var tobemaximized    := false
+var last_window_mode : int
 
 
 
@@ -45,6 +49,13 @@ func _ready() -> void:
 func _process(_delta) -> void:
 	if following:
 		DisplayServer.window_set_position(DisplayServer.window_get_position() + Vector2i(get_global_mouse_position()) - drag_start)
+	elif tobemaximized:
+		if last_window_mode == DisplayServer.WINDOW_MODE_MINIMIZED && DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_WINDOWED:
+			_on_maximize_pressed()
+			tobemaximized = false
+		else:
+			last_window_mode = DisplayServer.window_get_mode()
+			
 
 
 func _on_theme_change() -> void:
@@ -126,11 +137,16 @@ func _on_pin_toggled(button_pressed) -> void:
 
 
 func _on_minimize_pressed() -> void:
+	if maximized:
+		tobemaximized = true
+		_on_maximize_pressed()
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MINIMIZED)
 
 
 func _on_maximize_pressed() -> void:
 	var mode : int = DisplayServer.window_get_mode()
+	
+	maximized = (mode == DisplayServer.WINDOW_MODE_FULLSCREEN or mode == DisplayServer.WINDOW_MODE_MAXIMIZED)
 	
 	if mode == DisplayServer.WINDOW_MODE_FULLSCREEN or mode == DisplayServer.WINDOW_MODE_MAXIMIZED:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
@@ -140,6 +156,8 @@ func _on_maximize_pressed() -> void:
 		last_pos  = DisplayServer.window_get_position()
 		last_size = DisplayServer.window_get_size()
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED)
+	
+	maximized = !maximized
 
 
 func _on_close_pressed() -> void:
