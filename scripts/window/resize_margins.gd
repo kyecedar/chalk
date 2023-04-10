@@ -19,11 +19,13 @@ enum SIDE {
 @onready var br := $br
 
 var following  := false
+var drag_side  : SIDE
 var drag_start := Vector2i()
 var min_size   := Vector2i()
 var win_size   := Vector2i()
 var win_tl     := Vector2i()
 var win_br     := Vector2i()
+var max_pos    := Vector2i()
 
 
 
@@ -35,26 +37,12 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
-
-
-func drag(event: InputEvent, side: SIDE) -> void:
-	if event is InputEventMouseButton:
-		if Input.is_action_just_pressed("mouse_left"):
-			following = true
-			drag_start = get_local_mouse_position()
-			min_size = DisplayServer.window_get_min_size()
-			win_size = DisplayServer.window_get_size()
-			win_tl   = DisplayServer.window_get_position_with_decorations()
-			win_br   = win_tl + win_size
-		if Input.is_action_just_released("mouse_left"):
-			following = false
-	
-	elif event is InputEventMouseMotion && following:
-		var drag_vec := Vector2i(get_local_mouse_position()) - drag_start
-		var new_size : Vector2i
+	if following:
+		var drag_vec := Vector2i(get_global_mouse_position()) - drag_start
+		var new_pos  := DisplayServer.window_get_position()
+		var new_size := DisplayServer.window_get_size()
 		
-		match side:
+		match drag_side:
 			SIDE.TL:
 				pass
 			SIDE.T:
@@ -62,12 +50,15 @@ func drag(event: InputEvent, side: SIDE) -> void:
 			SIDE.TR:
 				pass
 			SIDE.L:
-				pass
+				drag_vec.y = 0
+				new_size -= drag_vec
+				new_pos.x += drag_vec.x
 			SIDE.R:
 				drag_vec.y = 0 # ignore y.
 				new_size = win_size + drag_vec
 			SIDE.BL:
-				pass
+				new_size = Vector2i(new_size.x - drag_vec.x, win_size.y + drag_vec.y)
+				new_pos.x += drag_vec.x
 			SIDE.B:
 				drag_vec.x = 0 # ignore x.
 				new_size = win_size + drag_vec
@@ -77,7 +68,26 @@ func drag(event: InputEvent, side: SIDE) -> void:
 		new_size.x = max(new_size.x, min_size.x) # keep above minimum
 		new_size.y = max(new_size.y, min_size.y) # keep above minimum
 		
+		new_pos.x = min(new_pos.x, max_pos.x)
+		new_pos.y = min(new_pos.y, max_pos.y)
+		
 		DisplayServer.window_set_size(new_size)
+		DisplayServer.window_set_position(new_pos)
+
+
+func drag(event: InputEvent, side: SIDE) -> void:
+	if event is InputEventMouseButton:
+		if Input.is_action_just_pressed("mouse_left"):
+			following = true
+			drag_side = side
+			drag_start = get_global_mouse_position()
+			min_size = DisplayServer.window_get_min_size()
+			win_size = DisplayServer.window_get_size()
+			win_tl   = DisplayServer.window_get_position_with_decorations()
+			win_br   = win_tl + win_size
+			max_pos  = win_br - min_size
+		if Input.is_action_just_released("mouse_left"):
+			following = false
 
 
 #func _on_background_gui_input(event) -> void:
