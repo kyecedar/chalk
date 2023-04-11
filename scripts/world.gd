@@ -10,9 +10,9 @@ extends Node2D
 @export var zoom_min       : float = 0.5
 @export var zoom_max       : float = 5.0
 
-@onready var grid        := $grid
-@onready var grid_center : ColorRect   = $grid_center
-@onready var camera      : Camera2D    = $camera
+@onready var grid        : Sprite2D  = $grid
+@onready var grid_center : ColorRect = $grid_center
+@onready var camera      : Camera2D  = $camera
 
 @onready var grid_solid       : Texture = load("res://assets/grid/solid.png")
 @onready var grid_solid_thick : Texture = load("res://assets/grid/solid thick.png")
@@ -28,17 +28,12 @@ var move : Vector2
 ###############
 
 func _ready():
+	resizeGrid()
 	chalk.onThemeChange(_on_theme_change)
 
 
 func _process(_delta):
 	grid.position = camera.position
-	var test = Vector2i(Vector2(DisplayServer.window_get_size()) / camera.zoom)
-	
-	var p1 = test / -2
-	var p2 = test
-	
-	grid.region_rect = Rect2(p1, p2)
 
 
 func _input(event):
@@ -74,7 +69,8 @@ func _on_theme_change():
 
 
 func resizeGrid():
-	pass#grid.size = Vector2(DisplayServer.window_get_size()) / camera.zoom
+	var size = Vector2i(Vector2(DisplayServer.window_get_size()) / camera.zoom)
+	grid.region_rect = Rect2(size / -2, size)
 
 
 func zoom(pos, inc):
@@ -85,11 +81,7 @@ func zoom(pos, inc):
 	
 	if camera.zoom.x < 1:
 		grid.texture = grid_solid_thick
-		if grid.material:
-			grid.material.set_shader_parameter("grid_texture", grid_solid_thick)
 	else:
 		grid.texture = grid_solid
-		if grid.material:
-			grid.material.set_shader_parameter("grid_texture", grid_solid)
 	
 	resizeGrid()
