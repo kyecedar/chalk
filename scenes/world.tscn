@@ -26,13 +26,6 @@ region_enabled = true
 region_rect = Rect2(0, 0, 25, 25)
 script = ExtResource("2_42cje")
 
-[node name="grid_center" type="ColorRect" parent="."]
-offset_left = -4.0
-offset_top = -4.0
-offset_right = 5.0
-offset_bottom = 5.0
-color = Color(0, 0, 0, 1)
-
 [node name="notes" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0

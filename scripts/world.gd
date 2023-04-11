@@ -11,7 +11,6 @@ extends Node2D
 @export var zoom_max       : float = 5.0
 
 @onready var grid        : Sprite2D  = $grid
-@onready var grid_center : ColorRect = $grid_center
 @onready var camera      : Camera2D  = $camera
 
 @onready var grid_solid       : Texture = load("res://assets/grid/solid.png")
@@ -64,7 +63,6 @@ func _on_theme_change():
 	if grid.material:
 		grid.material.set_shader_parameter("primary", chalk.theme.primary)
 		grid.material.set_shader_parameter("secondary", chalk.theme.secondary)
-	grid_center.color = chalk.theme.primary
 
 
 
