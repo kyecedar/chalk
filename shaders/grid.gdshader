@@ -1,6 +1,5 @@
 shader_type canvas_item;
 
-uniform sampler2D grid_texture: filter_nearest, repeat_enable;
 uniform vec4 primary : source_color;
 uniform vec4 secondary : source_color;
 uniform float opacity;

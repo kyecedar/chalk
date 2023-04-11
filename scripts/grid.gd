@@ -1,22 +1,35 @@
-@tool
-extends TextureRect
+extends Sprite2D
 
 
 
-@onready var camera : Camera2D = $"../camera"
-var offset := Vector2(-450, -350)
+@export var opacity : float = 0.2  :
+	set (value):
+		opacity = value
+		material.set_shader_parameter("opacity", value)
+
+@export var min_opacity : float = 0.05 :
+	set (value):
+		min_opacity = value
+		material.set_shader_parameter("min_opacity", value)
+
+@export var radius : float = 300  :
+	set (value):
+		radius = value
+		material.set_shader_parameter("radius", value)
+
+
+
+func _ready():
+	opacity     = opacity
+	min_opacity = min_opacity
+	radius      = radius
+
+
+func _process(_delta):
+	updateTextureOffset()
 
 
 
 func updateTextureOffset():
 	if material:
 		material.set_shader_parameter("offset", position)
-
-
-func _process(_delta):
-	#position = camera.position# + camera.offset + (size * scale * -0.5)
-	#scale = camera.zoom
-	#print("\n")
-	#print(position)
-	#print(Vector2(1,1) / scale)
-	updateTextureOffset()

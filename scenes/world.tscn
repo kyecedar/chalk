@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://scripts/world.gd" id="1_56kru"]
 [ext_resource type="Shader" path="res://shaders/grid.gdshader" id="1_t8fcj"]
-[ext_resource type="Script" path="res://scripts/gribd.gd" id="2_42cje"]
 [ext_resource type="Texture2D" uid="uid://cb7xt48susrit" path="res://assets/grid/solid thick.png" id="2_gfpts"]
+[ext_resource type="Script" path="res://scripts/grid.gd" id="3_b4vgl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fqdfx"]
 shader = ExtResource("1_t8fcj")
@@ -24,7 +24,7 @@ material = SubResource("ShaderMaterial_fqdfx")
 texture = ExtResource("2_gfpts")
 region_enabled = true
 region_rect = Rect2(0, 0, 25, 25)
-script = ExtResource("2_42cje")
+script = ExtResource("3_b4vgl")
 
 [node name="notes" type="Control" parent="."]
 layout_mode = 3
