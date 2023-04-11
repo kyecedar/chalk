@@ -13,9 +13,17 @@ void fragment() {
 	vec2  center = res / vec2(2); // center of the screen.
 	vec2  pixel  = res * SCREEN_UV; // pixel position.
 	
+	// distance to center from 0-1. relative to radius var.
+	float dist = min(distance(center, pixel), float(radius)) / float(radius);
+	
 	COLOR = texture(TEXTURE, (offset * TEXTURE_PIXEL_SIZE) + UV);
 	COLOR = secondary * COLOR; // modulate the color to the secondary colour.
 	COLOR = vec4(mix(primary.rgb, COLOR.rgb, opacity), COLOR.a);
+	
+	vec4 back = mix(primary, secondary, min_opacity);
+	
+	COLOR = vec4(mix(COLOR.rgb, back.rgb, smoothstep(0, 1, dist)), COLOR.a);
+	
 	
 	/*
 	COLOR = texture(TEXTURE, (offset * TEXTURE_PIXEL_SIZE) + UV);

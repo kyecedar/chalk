@@ -1,34 +1,23 @@
-[gd_scene load_steps=9 format=3 uid="uid://colxabte1sgm7"]
+[gd_scene load_steps=6 format=3 uid="uid://colxabte1sgm7"]
 
 [ext_resource type="Script" path="res://scripts/world.gd" id="1_56kru"]
 [ext_resource type="Shader" path="res://shaders/grid.gdshader" id="1_t8fcj"]
 [ext_resource type="Script" path="res://scripts/gribd.gd" id="2_42cje"]
 [ext_resource type="Texture2D" uid="uid://cb7xt48susrit" path="res://assets/grid/solid thick.png" id="2_gfpts"]
-[ext_resource type="Script" path="res://scripts/grid.gd" id="3_b4vgl"]
-[ext_resource type="Texture2D" uid="uid://iduf2onifuft" path="res://assets/grid/solid.png" id="3_vubba"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fqdfx"]
 shader = ExtResource("1_t8fcj")
 shader_parameter/primary = null
 shader_parameter/secondary = null
-shader_parameter/opacity = 1.0
-shader_parameter/min_opacity = 0.25
+shader_parameter/opacity = 0.8
+shader_parameter/min_opacity = 0.05
 shader_parameter/offset = null
-shader_parameter/radius = null
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_kanf3"]
-shader = ExtResource("1_t8fcj")
-shader_parameter/primary = null
-shader_parameter/secondary = null
-shader_parameter/opacity = null
-shader_parameter/min_opacity = null
-shader_parameter/offset = Vector2(0, 0)
-shader_parameter/radius = null
+shader_parameter/radius = 300
 
 [node name="world" type="Node2D"]
 script = ExtResource("1_56kru")
 
-[node name="gribd" type="Sprite2D" parent="."]
+[node name="grid" type="Sprite2D" parent="."]
 texture_filter = 1
 texture_repeat = 2
 material = SubResource("ShaderMaterial_fqdfx")
@@ -36,16 +25,6 @@ texture = ExtResource("2_gfpts")
 region_enabled = true
 region_rect = Rect2(0, 0, 25, 25)
 script = ExtResource("2_42cje")
-
-[node name="grid" type="TextureRect" parent="."]
-visible = false
-material = SubResource("ShaderMaterial_kanf3")
-offset_right = 900.0
-offset_bottom = 700.0
-pivot_offset = Vector2(450, 350)
-texture = ExtResource("3_vubba")
-stretch_mode = 1
-script = ExtResource("3_b4vgl")
 
 [node name="grid_center" type="ColorRect" parent="."]
 offset_left = -4.0

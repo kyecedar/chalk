@@ -47,7 +47,7 @@ var themes : Array = [
 	},
 ]
 
-@export var selected_theme : int = 4
+@export var selected_theme : int = 1
 var theme_invert := false
 var theme        : Dictionary
 

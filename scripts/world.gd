@@ -10,7 +10,7 @@ extends Node2D
 @export var zoom_min       : float = 0.5
 @export var zoom_max       : float = 5.0
 
-@onready var grid        := $gribd
+@onready var grid        := $grid
 @onready var grid_center : ColorRect   = $grid_center
 @onready var camera      : Camera2D    = $camera
 
