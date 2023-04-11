@@ -13,7 +13,7 @@ mouse_filter = 2
 script = ExtResource("1_nf0rn")
 
 [node name="top" type="Control" parent="."]
-custom_minimum_size = Vector2(0, 5)
+custom_minimum_size = Vector2(0, 6)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -21,7 +21,7 @@ grow_horizontal = 2
 mouse_default_cursor_shape = 9
 
 [node name="bottom" type="Control" parent="."]
-custom_minimum_size = Vector2(0, 5)
+custom_minimum_size = Vector2(0, 6)
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -32,7 +32,7 @@ grow_vertical = 0
 mouse_default_cursor_shape = 9
 
 [node name="left" type="Control" parent="."]
-custom_minimum_size = Vector2(5, 0)
+custom_minimum_size = Vector2(6, 0)
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -40,7 +40,7 @@ grow_vertical = 2
 mouse_default_cursor_shape = 10
 
 [node name="right" type="Control" parent="."]
-custom_minimum_size = Vector2(5, 0)
+custom_minimum_size = Vector2(6, 0)
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -51,45 +51,45 @@ grow_vertical = 2
 mouse_default_cursor_shape = 10
 
 [node name="tl" type="Control" parent="."]
-custom_minimum_size = Vector2(3, 3)
+custom_minimum_size = Vector2(6, 6)
 layout_mode = 1
 anchors_preset = 0
-offset_right = 5.0
-offset_bottom = 5.0
+offset_right = 6.0
+offset_bottom = 6.0
 mouse_default_cursor_shape = 12
 
 [node name="tr" type="Control" parent="."]
-custom_minimum_size = Vector2(5, 5)
+custom_minimum_size = Vector2(6, 6)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -5.0
-offset_bottom = 5.0
+offset_left = -6.0
+offset_bottom = 6.0
 grow_horizontal = 0
 mouse_default_cursor_shape = 11
 
 [node name="bl" type="Control" parent="."]
-custom_minimum_size = Vector2(5, 5)
+custom_minimum_size = Vector2(6, 6)
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -5.0
-offset_right = 5.0
+offset_top = -6.0
+offset_right = 6.0
 grow_vertical = 0
 mouse_default_cursor_shape = 11
 
 [node name="br" type="Control" parent="."]
-custom_minimum_size = Vector2(5, 5)
+custom_minimum_size = Vector2(6, 6)
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -5.0
-offset_top = -5.0
+offset_left = -6.0
+offset_top = -6.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_default_cursor_shape = 12

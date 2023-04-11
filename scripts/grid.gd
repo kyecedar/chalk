@@ -9,9 +9,14 @@ var offset := Vector2(-450, -350)
 
 
 func updateTextureOffset():
-	material.set_shader_parameter("offset", position)
+	if material:
+		material.set_shader_parameter("offset", position)
 
 
 func _process(_delta):
-	position = camera.position + camera.offset + (size / -2)
+	#position = camera.position# + camera.offset + (size * scale * -0.5)
+	#scale = camera.zoom
+	#print("\n")
+	#print(position)
+	#print(Vector2(1,1) / scale)
 	updateTextureOffset()

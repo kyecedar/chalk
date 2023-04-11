@@ -11,14 +11,16 @@ uniform int radius;
 void fragment() {
 	vec2  res    = vec2(1) / SCREEN_PIXEL_SIZE; // pixel resolution.
 	vec2  center = res / vec2(2); // center of the screen.
-	float aspect = res.x / res.y; // aspect ratio.
 	vec2  pixel  = res * SCREEN_UV; // pixel position.
 	
-	
-	
-	COLOR = texture(grid_texture, (offset * TEXTURE_PIXEL_SIZE) + UV);
+	COLOR = texture(TEXTURE, (offset * TEXTURE_PIXEL_SIZE) + UV);
 	COLOR = secondary * COLOR; // modulate the color to the secondary colour.
-	COLOR = vec4(mix(primary.rgb, COLOR.rgb, opacity), min(COLOR.a, primary.a)); // maximum-opacity color.
+	COLOR = vec4(mix(primary.rgb, COLOR.rgb, opacity), COLOR.a);
+	
+	/*
+	COLOR = texture(TEXTURE, (offset * TEXTURE_PIXEL_SIZE) + UV);
+	COLOR = secondary * COLOR; // modulate the color to the secondary colour.
+	COLOR = vec4(mix(primary.rgb, COLOR.rgb, opacity * COLOR.a), min(COLOR.a, primary.a)); // maximum-opacity color.
 	
 	// minimum-opacity color.
 	vec4 b = vec4(mix(primary.rgb, COLOR.rgb, min_opacity), min(COLOR.a, primary.a));
@@ -28,4 +30,5 @@ void fragment() {
 	
 	// final colour. mixing the max and min opacity colors depending on distance to centre.
 	COLOR = vec4(mix(COLOR.rgb, b.rgb, smoothstep(0, 1, dist)), min(COLOR.a, b.a));
+	*/
 }
