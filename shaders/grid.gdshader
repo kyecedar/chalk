@@ -6,6 +6,7 @@ uniform float opacity;
 uniform float min_opacity;
 uniform vec2 offset;
 uniform int radius;
+uniform int center_dot_radius;
 
 void fragment() {
 	vec2  res    = vec2(1) / SCREEN_PIXEL_SIZE; // pixel resolution.
@@ -13,29 +14,18 @@ void fragment() {
 	vec2  pixel  = res * SCREEN_UV; // pixel position.
 	
 	// distance to center from 0-1. relative to radius var.
-	float dist = min(distance(center, pixel), float(radius)) / float(radius);
+	float dist       = min(distance(center, pixel), float(radius)) / float(radius);
+	float center_dot = min(distance(center, pixel), float(center_dot_radius)) / float(center_dot_radius);
 	
-	COLOR = texture(TEXTURE, (offset * TEXTURE_PIXEL_SIZE) + UV);
-	COLOR = secondary * COLOR; // modulate the color to the secondary colour.
-	COLOR = vec4(mix(primary.rgb, COLOR.rgb, opacity), COLOR.a);
-	
-	vec4 back = mix(primary, secondary, min_opacity);
-	
-	COLOR = vec4(mix(COLOR.rgb, back.rgb, smoothstep(0, 1, dist)), COLOR.a);
-	
-	
-	/*
-	COLOR = texture(TEXTURE, (offset * TEXTURE_PIXEL_SIZE) + UV);
-	COLOR = secondary * COLOR; // modulate the color to the secondary colour.
-	COLOR = vec4(mix(primary.rgb, COLOR.rgb, opacity * COLOR.a), min(COLOR.a, primary.a)); // maximum-opacity color.
-	
-	// minimum-opacity color.
-	vec4 b = vec4(mix(primary.rgb, COLOR.rgb, min_opacity), min(COLOR.a, primary.a));
-	
-	// distance to center from 0-1. relative to radius var.
-	float dist = min(distance(center, pixel), float(radius)) / float(radius);
-	
-	// final colour. mixing the max and min opacity colors depending on distance to centre.
-	COLOR = vec4(mix(COLOR.rgb, b.rgb, smoothstep(0, 1, dist)), min(COLOR.a, b.a));
-	*/
+	if(center_dot < 1.0)
+		COLOR = vec4(mix(primary.rgb, secondary.rgb, opacity), 1.0);
+	else {
+		COLOR = texture(TEXTURE, (offset * TEXTURE_PIXEL_SIZE) + UV);
+		COLOR = secondary * COLOR; // modulate the color to the secondary colour.
+		COLOR = vec4(mix(primary.rgb, COLOR.rgb, opacity), COLOR.a);
+		
+		vec4 back = mix(primary, secondary, min_opacity);
+		
+		COLOR = vec4(mix(COLOR.rgb, back.rgb, smoothstep(0, 1, dist)), COLOR.a);
+	}
 }

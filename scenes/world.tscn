@@ -13,6 +13,7 @@ shader_parameter/opacity = 0.3
 shader_parameter/min_opacity = 0.05
 shader_parameter/offset = null
 shader_parameter/radius = 300
+shader_parameter/center_dot_radius = 0
 
 [node name="world" type="Node2D"]
 script = ExtResource("1_56kru")

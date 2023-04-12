@@ -16,9 +16,11 @@ extends Node2D
 @onready var grid_solid       : Texture = load("res://assets/grid/solid.png")
 @onready var grid_solid_thick : Texture = load("res://assets/grid/solid thick.png")
 
-var follow     : bool = false
-var move_start : Vector2
-var move       : Vector2
+var bingus      : bool = false
+var follow      : bool = false
+var move_start  : Vector2
+var move_offset : Vector2
+var move        : Vector2
 
 
 
@@ -40,9 +42,14 @@ func _input(event):
 		# panning navigation.
 		if Input.is_action_just_pressed("mouse_middle"):
 			follow = true
-			move_start = get_local_mouse_position()
+			move_start  = get_local_mouse_position()
+			move_offset = Vector2.ZERO
 		elif Input.is_action_just_released("mouse_middle"):
 			follow = false
+		elif Input.is_action_just_pressed("mouse_left"):
+			bingus = true
+		elif Input.is_action_just_released("mouse_left"):
+			bingus = false
 		
 		elif event.is_pressed():
 			match event.button_index:
@@ -56,8 +63,32 @@ func _input(event):
 	# panning navigation.
 	elif event is InputEventMouseMotion:
 		if follow:
-			camera.position += move_start - get_local_mouse_position()
+			camera.position += move_start - get_local_mouse_position() + move_offset
 			grid.position = camera.position
+			
+			# trap mouse.
+			var mouse_pos = get_viewport().get_mouse_position()
+			var view_size  = get_viewport_rect().size
+			
+			if mouse_pos.x > view_size.x:
+				mouse_pos.x = 0
+				mouse_pos.y += 30
+				move_offset.x -= view_size.x
+				Input.warp_mouse(mouse_pos)
+			elif mouse_pos.x < 0:
+				mouse_pos.x = view_size.x
+				mouse_pos.y += 30
+				move_offset.x += view_size.x
+				Input.warp_mouse(mouse_pos)
+			
+			if mouse_pos.y > view_size.y:
+				mouse_pos.y = 30
+				move_offset.y -= view_size.y
+				Input.warp_mouse(mouse_pos)
+			elif mouse_pos.y < 0:
+				mouse_pos.y = view_size.y
+				move_offset.y += view_size.y
+				Input.warp_mouse(mouse_pos)
 
 
 func _on_theme_change():
