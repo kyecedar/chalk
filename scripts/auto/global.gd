@@ -16,6 +16,11 @@ enum Type {
 
 var themes : Array = [
 	{
+		"name": "theme 0.",
+		"primary"   : "3dabe8", # Cerulean
+		"secondary" : "000000", # Black
+	},
+	{
 		"name": "theme 1.",
 		"primary"   : "c1cd96", # Spring Green
 		"secondary" : "3e574f", # Outer Space
@@ -37,17 +42,37 @@ var themes : Array = [
 	},
 	{
 		"name": "theme 5.",
-		"primary"   : "d2ba60",
-		"secondary" : "000000",
+		"primary"   : "d2ba60", # Olive Green
+		"secondary" : "000000", # Black
 	},
 	{
 		"name": "theme 6.",
-		"primary"   : "3dabe8",
-		"secondary" : "000000",
+		"primary"   : "dbe195", # Green Yellow
+		"secondary" : "3009aa", # Purple Heart
+	},
+	{
+		"name": "theme 7.",
+		"primary"   : "76ef88", # Screamin Green
+		"secondary" : "3b2144", # Eggplant
+	},
+	{
+		"name": "theme 8.",
+		"primary"   : "1f9a98", # Pine Green
+		"secondary" : "14091e", # Black
+	},
+	{
+		"name": "theme 9.",
+		"primary"   : "d68761", # Raw Sienna
+		"secondary" : "2c2802", # Black
+	},
+	{
+		"name": "theme 10.",
+		"primary"   : "d8e7d9", # Timberwolf
+		"secondary" : "526b36", # Asparagus
 	},
 ]
 
-@export var selected_theme : int = 1
+@export var selected_theme : int = 0
 var theme_invert := false
 var theme        : Dictionary
 

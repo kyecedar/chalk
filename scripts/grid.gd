@@ -2,7 +2,7 @@ extends Sprite2D
 
 
 
-@export var opacity : float = 0.2  :
+@export var opacity : float = 0.3 :
 	set (value):
 		opacity = value
 		material.set_shader_parameter("opacity", value)
@@ -12,7 +12,7 @@ extends Sprite2D
 		min_opacity = value
 		material.set_shader_parameter("min_opacity", value)
 
-@export var radius : float = 300  :
+@export var radius : float = 300 :
 	set (value):
 		radius = value
 		material.set_shader_parameter("radius", value)

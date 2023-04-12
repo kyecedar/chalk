@@ -16,9 +16,9 @@ extends Node2D
 @onready var grid_solid       : Texture = load("res://assets/grid/solid.png")
 @onready var grid_solid_thick : Texture = load("res://assets/grid/solid thick.png")
 
-var follow : bool = false
+var follow     : bool = false
 var move_start : Vector2
-var move : Vector2
+var move       : Vector2
 
 
 
@@ -32,7 +32,7 @@ func _ready():
 
 
 func _process(_delta):
-	grid.position = camera.position
+	pass
 
 
 func _input(event):
@@ -57,6 +57,7 @@ func _input(event):
 	elif event is InputEventMouseMotion:
 		if follow:
 			camera.position += move_start - get_local_mouse_position()
+			grid.position = camera.position
 
 
 func _on_theme_change():

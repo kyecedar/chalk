@@ -9,7 +9,7 @@
 shader = ExtResource("1_t8fcj")
 shader_parameter/primary = null
 shader_parameter/secondary = null
-shader_parameter/opacity = 0.8
+shader_parameter/opacity = 0.3
 shader_parameter/min_opacity = 0.05
 shader_parameter/offset = null
 shader_parameter/radius = 300
