@@ -54,14 +54,31 @@ body {
 }
 
 #window-titlebar button {
-	margin: 0;
+	position: relative;
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
+	margin: 0;
 	width: var(--window-titlebar-button-width);
 	height: var(--window-titlebar-button-height);
 }
 
+#window-titlebar button::before {
+	z-index: -2;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	content: "";
+	width: 100%;
+	height: 100%;
+}
+
 #window-titlebar button:hover {
-	background: grey;
+	color: white;
+}
+
+#window-titlebar button:hover::before {
+	background: black;
 }
