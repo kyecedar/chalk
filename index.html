@@ -13,11 +13,12 @@
   </head>
   <body>
     <div id="window-titlebar" style="user-select: none;">
-      <div data-tauri-drag-region>
+      <div id="window-title-section">
         <span id="window-title">chalk.</span>
+        <div data-tauri-drag-region></div>
       </div>
       <nav>
-        <button>-</button><button>M</button><button>X</button>
+        <button class="minimize">-</button><button class="maximize">M</button><button class="close">X</button>
       </nav>
     </div>
     <div class="container">

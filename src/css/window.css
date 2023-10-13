@@ -1,7 +1,8 @@
 :root {
+	--window-titlebar-drag-margin: 4px;
 	--window-titlebar-margin: 1px;
-	--window-titlebar-button-width: 44px;
-	--window-titlebar-button-height: 32px;
+	--window-titlebar-button-width: 40px;
+	--window-titlebar-button-height: 30px;
 	--window-titlebar-height: calc(var(--window-titlebar-button-height) + var(--window-titlebar-margin) * 2);
 }
 
@@ -31,12 +32,25 @@ body {
 	right: 0;
 }
 
-#window-titlebar [data-tauri-drag-region] {
+#window-title-section {
+	position: relative;
 	flex-grow: 1;
 }
 
 #window-title {
 	pointer-events: none;
+	display: inline-flex;
+	align-items: center;
+	height: 100%;
+	
+}
+
+#window-title-section [data-tauri-drag-region] {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	width: calc(100% - var(--window-titlebar-drag-margin));
+	height: calc(100% - var(--window-titlebar-drag-margin));
 }
 
 #window-titlebar button {
@@ -46,4 +60,8 @@ body {
 	align-items: center;
 	width: var(--window-titlebar-button-width);
 	height: var(--window-titlebar-button-height);
+}
+
+#window-titlebar button:hover {
+	background: grey;
 }
