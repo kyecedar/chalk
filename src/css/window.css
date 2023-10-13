@@ -1,0 +1,49 @@
+:root {
+	--window-titlebar-margin: 1px;
+	--window-titlebar-button-width: 44px;
+	--window-titlebar-button-height: 32px;
+	--window-titlebar-height: calc(var(--window-titlebar-button-height) + var(--window-titlebar-margin) * 2);
+}
+
+html {
+	width: 100vw;
+	height: 100vh;
+
+	overflow: hidden;
+}
+
+body {
+	width: 100%;
+	height: 100%;
+}
+
+/* WINDOW.
+*/
+
+#window-titlebar {
+	height: var(--window-titlebar-height);
+	user-select: none;
+	display: flex;
+	justify-content: flex-end;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+}
+
+#window-titlebar [data-tauri-drag-region] {
+	flex-grow: 1;
+}
+
+#window-title {
+	pointer-events: none;
+}
+
+#window-titlebar button {
+	margin: 0;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	width: var(--window-titlebar-button-width);
+	height: var(--window-titlebar-button-height);
+}
