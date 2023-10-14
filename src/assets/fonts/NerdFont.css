@@ -1,0 +1,13 @@
+@font-face {
+	font-family: "NerdFont";
+	src: url(/src/assets/fonts/NerdFont/Regular.ttf);
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "NerdFont", monospace;
+	src: url(/src/assets/fonts/NerdFont/Mono.ttf);
+	font-weight: normal;
+	font-style: normal;
+}

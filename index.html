@@ -7,6 +7,7 @@
     <title>Tauri App</title>
 
     <link rel="stylesheet" href="/src/css/reset.css" />
+    <link rel="stylesheet" href="/src/css/global.css" />
     <link rel="stylesheet" href="/src/css/window.css" />
     
     <script type="module" src="/src/main.ts" defer></script>
@@ -18,10 +19,10 @@
         <span id="window-title">chalk.</span>
       </div>
       <nav>
-        <button class="minimize" aria-label="Minimize">-</button><button class="maximize" aria-label="Maximize">M</button><button class="close" aria-label="Close">X</button>
+        <button class="minimize" aria-label="Minimize"></button><button class="maximize" aria-label="Maximize"></button><button class="close" aria-label="Close"></button>
       </nav>
     </div>
-    <div class="container">
-    </div>
+    <main id="window-content">
+    </main>
   </body>
 </html>

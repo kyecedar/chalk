@@ -1,6 +1,7 @@
 :root {
 	--window-titlebar-drag-margin: 4px;
 	--window-titlebar-margin: 1px;
+	--window-title-margin: 6px;
 	--window-titlebar-button-width: 40px;
 	--window-titlebar-button-height: 30px;
 	--window-titlebar-height: calc(var(--window-titlebar-button-height) + var(--window-titlebar-margin) * 2);
@@ -16,9 +17,11 @@ html {
 body {
 	width: 100%;
 	height: 100%;
+	display: flex;
+	flex-direction: column;
 }
 
-/* WINDOW.
+/* TITLEBAR.
 */
 
 #window-titlebar {
@@ -26,10 +29,8 @@ body {
 	user-select: none;
 	display: flex;
 	justify-content: flex-end;
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
+	width: 100vw;
+	height: var(--window-titlebar-height);
 }
 
 #window-title-section {
@@ -42,7 +43,9 @@ body {
 	display: inline-flex;
 	align-items: center;
 	height: 100%;
-	
+	margin: 0px var(--window-title-margin);
+	font-family: "DMSerifDisplay";
+	font-style: normal;
 }
 
 #window-title-section [data-tauri-drag-region] {
@@ -58,7 +61,6 @@ body {
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
-	margin: 0;
 	width: var(--window-titlebar-button-width);
 	height: var(--window-titlebar-button-height);
 }
@@ -75,10 +77,52 @@ body {
 	height: 100%;
 }
 
-#window-titlebar button:hover {
-	color: white;
+#window-titlebar button::after {
+	z-index: 0;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	content: "";
+	width: 100%;
+	height: 100%;
+	mask-size: 100%;
+	-webkit-mask-size: 100%;
+	background: black;
+}
+
+#window-titlebar button:hover::after {
+	background: white;
 }
 
 #window-titlebar button:hover::before {
 	background: black;
+}
+
+#window-titlebar .minimize::after {
+	mask-image: url(/src/assets/window/minimize.svg);
+	-webkit-mask-image: url(/src/assets/window/minimize.svg);
+}
+
+#window-titlebar .maximize::after {
+	mask-image: url(/src/assets/window/maximize.svg);
+	-webkit-mask-image: url(/src/assets/window/maximize.svg);
+}
+
+#window-titlebar .maximize[maximized]::after {
+	mask-image: url(/src/assets/window/unmaximize.svg);
+	-webkit-mask-image: url(/src/assets/window/unmaximize.svg);
+}
+
+#window-titlebar .close::after {
+	mask-image: url(/src/assets/window/close.svg);
+	-webkit-mask-image: url(/src/assets/window/close.svg);
+}
+
+/* CONTENT.
+*/
+
+#window-content {
+	flex-grow: 1;
 }

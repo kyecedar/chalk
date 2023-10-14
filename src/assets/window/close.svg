@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 40 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-150,-1.77636e-15)">
+        <g id="Close" transform="matrix(0.909091,0,0,0.909091,56.3636,-8.18182)">
+            <rect x="103" y="9" width="44" height="33" style="fill:none;"/>
+            <g transform="matrix(1.1,0,0,1.1,-11.4,-2)">
+                <path d="M129,20L128,20L128,21L127,21L127,22L126,22L126,23L125,23L125,24L123,24L123,23L122,23L122,22L121,22L121,21L120,21L120,20L119,20L119,21L120,21L120,22L121,22L121,23L122,23L122,24L123,24L123,26L122,26L122,27L121,27L121,28L120,28L120,29L119,29L119,30L120,30L120,29L121,29L121,28L122,28L122,27L123,27L123,26L125,26L125,27L126,27L126,28L127,28L127,29L128,29L128,30L129,30L129,29L128,29L128,28L127,28L127,27L126,27L126,26L125,26L125,24L126,24L126,23L127,23L127,22L128,22L128,21L129,21L129,20Z" style="fill:white;"/>
+            </g>
+        </g>
+    </g>
+</svg>

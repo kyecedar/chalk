@@ -1,0 +1,55 @@
+@font-face {
+	font-family: "SpaceMonoNerd", monospace;
+	src: url(/src/assets/fonts/SpaceMonoNerd/MonoRegular.ttf);
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "SpaceMonoNerd", monospace;
+	src: url(/src/assets/fonts/SpaceMonoNerd/MonoItalic.ttf);
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "SpaceMonoNerd", monospace;
+	src: url(/src/assets/fonts/SpaceMonoNerd/MonoBold.ttf);
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "SpaceMonoNerd", monospace;
+	src: url(/src/assets/fonts/SpaceMonoNerd/MonoBoldItalic.ttf);
+	font-weight: bold;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "SpaceMonoNerdMono", monospace;
+	src: url(/src/assets/fonts/SpaceMonoNerd/MonoMonoRegular.ttf);
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "SpaceMonoNerdMono", monospace;
+	src: url(/src/assets/fonts/SpaceMonoNerd/MonoMonoItalic.ttf);
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "SpaceMonoNerdMono", monospace;
+	src: url(/src/assets/fonts/SpaceMonoNerd/MonoMonoBold.ttf);
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "SpaceMonoNerdMono", monospace;
+	src: url(/src/assets/fonts/SpaceMonoNerd/MonoMonoBoldItalic.ttf);
+	font-weight: bold;
+	font-style: italic;
+}

@@ -1,4 +1,5 @@
 //import { invoke } from "@tauri-apps/api/tauri";
+import { appWindow } from "@tauri-apps/api/window";
 
 import { add_button_event_listeners } from "./js/window";
 
@@ -15,6 +16,8 @@ async function greet() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  appWindow.show();
+
   add_button_event_listeners();
   // greetInputEl = document.querySelector("#greet-input");
   // greetMsgEl = document.querySelector("#greet-msg");

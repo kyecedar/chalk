@@ -1,0 +1,41 @@
+@font-face {
+	font-family: "OpenDyslexicNerd";
+	src: url(/src/assets/fonts/OpenDyslexicNerd/Regular.otf);
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "OpenDyslexicNerd";
+	src: url(/src/assets/fonts/OpenDyslexicNerd/Italic.otf);
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "OpenDyslexicNerd";
+	src: url(/src/assets/fonts/OpenDyslexicNerd/Bold.otf);
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "OpenDyslexicNerd";
+	src: url(/src/assets/fonts/OpenDyslexicNerd/BoldItalic.otf);
+	font-weight: bold;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "OpenDyslexicNerd", monospace;
+	src: url(/src/assets/fonts/OpenDyslexicNerd/Mono.otf);
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "OpenDyslexicNerdMono", monospace;
+	src: url(/src/assets/fonts/OpenDyslexicNerd/MonoMono.otf);
+	font-weight: normal;
+	font-style: normal;
+}

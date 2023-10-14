@@ -7,7 +7,7 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "tauri-app",
+    "productName": "chalk",
     "version": "0.0.0"
   },
   "tauri": {
@@ -57,7 +57,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.tauri.dev",
+      "identifier": "chalk.kye.dog",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -71,11 +71,14 @@
     },
     "windows": [
       {
+        "visible": false,
         "fullscreen": false,
         "resizable": true,
         "title": "chalk.",
         "width": 800,
         "height": 600,
+        "minWidth": 500,
+        "minHeight": 450,
         "decorations": false
       }
     ]

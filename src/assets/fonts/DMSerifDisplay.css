@@ -1,0 +1,13 @@
+@font-face {
+	font-family: "DMSerifDisplay";
+	src: url(/src/assets/fonts/DMSerifDisplay/Regular.ttf);
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "DMSerifDisplay";
+	src: url(/src/assets/fonts/DMSerifDisplay/Italic.ttf);
+	font-weight: normal;
+	font-style: italic;
+}
