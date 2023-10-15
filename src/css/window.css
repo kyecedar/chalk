@@ -1,5 +1,6 @@
 :root {
 	--window-titlebar-drag-margin: 4px;
+	--window-title-font-size: 16px;
 	--window-titlebar-margin: 1px;
 	--window-title-margin: 6px;
 	--window-titlebar-button-width: 40px;
@@ -25,6 +26,7 @@ body {
 */
 
 #window-titlebar {
+	z-index: 9999;
 	height: var(--window-titlebar-height);
 	user-select: none;
 	display: flex;
@@ -46,6 +48,7 @@ body {
 	margin: 0px var(--window-title-margin);
 	font-family: "DMSerifDisplay";
 	font-style: normal;
+	font-size: var(--window-title-font-size);
 }
 
 #window-title-section [data-tauri-drag-region] {
@@ -124,5 +127,14 @@ body {
 */
 
 #window-content {
+	position: relative;
 	flex-grow: 1;
+}
+
+#board-view {
+	position: absolute;
+	width: 10px;
+	height: 10px;
+	offset: -5px;
+	background-color: black;
 }
