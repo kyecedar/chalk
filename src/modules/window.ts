@@ -1,16 +1,17 @@
 import { appWindow } from "@tauri-apps/api/window";
 
-let minimize_button: Element | null;
-let maximize_button: Element | null;
-let close_button: Element | null;
+let taskbar: HTMLDivElement;
+let minimize_button: HTMLButtonElement;
+let maximize_button: HTMLButtonElement;
+let close_button: HTMLButtonElement;
 
 async function minimize_window() {
 	appWindow.minimize();
 }
 
 async function update_maximize_attribute() {
-	if(await appWindow.isMaximized()) maximize_button!.setAttribute("maximized", "");
-	else maximize_button!.removeAttribute("maximized");
+	if(await appWindow.isMaximized()) taskbar?.setAttribute("maximized", "");
+	else taskbar?.removeAttribute("maximized");
 }
 
 async function maximize_window() {
@@ -27,10 +28,11 @@ async function close_window() {
 	appWindow.close();
 }
 
-export async function add_button_event_listeners() {
-	minimize_button = document.querySelector("#window-titlebar .minimize");
-	maximize_button = document.querySelector("#window-titlebar .maximize");
-	close_button = document.querySelector("#window-titlebar .close");
+export async function register_button_listeners() {
+	taskbar = (document.getElementById("window-titlebar") as HTMLDivElement)!;
+	minimize_button = (document.querySelector("#window-titlebar .minimize") as HTMLButtonElement)!;
+	maximize_button = (document.querySelector("#window-titlebar .maximize") as HTMLButtonElement)!;
+	close_button = (document.querySelector("#window-titlebar .close") as HTMLButtonElement)!;
 
 	minimize_button?.addEventListener("click", minimize_window);
 	maximize_button?.addEventListener("click", maximize_window);

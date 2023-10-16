@@ -12,7 +12,7 @@
     
     <script type="module" src="/src/main.ts" defer></script>
   </head>
-  <body>
+  <body oncontextmenu="return false;">
     <div id="window-titlebar" style="user-select: none;">
       <div id="window-title-section">
         <div data-tauri-drag-region></div>
@@ -24,6 +24,7 @@
     </div>
     <main id="window-content">
       <div id="board-view">
+        <div id="testext" style="position: absolute;">shit</div>
       </div>
     </main>
   </body>

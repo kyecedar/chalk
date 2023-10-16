@@ -3,7 +3,8 @@ import { appWindow } from "@tauri-apps/api/window";
 
 import "./modules/logger";
 
-import { add_button_event_listeners } from "./modules/window";
+import { register_button_listeners } from "./modules/window";
+import { register_listeners } from "./modules/input";
 import * as board from "./modules/board";
 
 // let greetInputEl: HTMLInputElement | null;
@@ -18,22 +19,37 @@ import * as board from "./modules/board";
   // });
 // }
 
+declare global {
+    var testext: HTMLDivElement;
+}
+
 window.addEventListener("DOMContentLoaded", () => {
-  appWindow.show();
+    globalThis.testext = (document.getElementById("testext") as HTMLDivElement)!;
+    appWindow.show();
 
-  // TITLEBAR.
-  add_button_event_listeners();
+    // TITLEBAR.
+    register_button_listeners();
 
-  logger.info("shit");
+    // INPUT.
+    register_listeners();
 
-  // BOARD VIEW.
-  board.init();
-  //canvas.animate();
+    //logger.info("shit");
 
-  // greetInputEl = document.querySelector("#greet-input");
-  // greetMsgEl = document.querySelector("#greet-msg");
-  // document.querySelector("#greet-form")?.addEventListener("submit", (e) => {
-  //   e.preventDefault();
-  //   greet();
-  // });
+    // BOARD VIEW.
+    board.init();
+    //@ts-ignore
+    console.log(window.shit);
+    //canvas.animate();
+
+    // CONFIG.
+    // input.add_wheel_callback((evt: WheelEvent) => {
+    //   if(testext) testext.innerText = evt.deltaY.toString();
+    // });
+
+    // greetInputEl = document.querySelector("#greet-input");
+    // greetMsgEl = document.querySelector("#greet-msg");
+    // document.querySelector("#greet-form")?.addEventListener("submit", (e) => {
+    //   e.preventDefault();
+    //   greet();
+    // });
 });

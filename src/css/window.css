@@ -26,6 +26,12 @@ body {
 */
 
 #window-titlebar {
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 	z-index: 9999;
 	height: var(--window-titlebar-height);
 	user-select: none;
@@ -33,6 +39,7 @@ body {
 	justify-content: flex-end;
 	width: 100vw;
 	height: var(--window-titlebar-height);
+	background-color: #FFFFFF;
 }
 
 #window-title-section {
@@ -51,12 +58,17 @@ body {
 	font-size: var(--window-title-font-size);
 }
 
-#window-title-section [data-tauri-drag-region] {
+#window-titlebar [data-tauri-drag-region] {
 	position: absolute;
 	right: 0;
 	bottom: 0;
 	width: calc(100% - var(--window-titlebar-drag-margin));
 	height: calc(100% - var(--window-titlebar-drag-margin));
+}
+
+#window-titlebar[maximized] [data-tauri-drag-region] {
+	width: 100%;
+	height: 100%;
 }
 
 #window-titlebar button {
@@ -113,7 +125,7 @@ body {
 	-webkit-mask-image: url(/src/assets/window/maximize.svg);
 }
 
-#window-titlebar .maximize[maximized]::after {
+#window-titlebar[maximized] .maximize::after {
 	mask-image: url(/src/assets/window/unmaximize.svg);
 	-webkit-mask-image: url(/src/assets/window/unmaximize.svg);
 }
@@ -129,6 +141,7 @@ body {
 #window-content {
 	position: relative;
 	flex-grow: 1;
+	background-color: white;
 }
 
 #board-view {
@@ -137,4 +150,18 @@ body {
 	height: 10px;
 	offset: -5px;
 	background-color: black;
+}
+
+.test {
+	position: absolute;
+	width: 10px;
+	height: 10px;
+	outline-color: #000000cc;
+	outline-style: solid;
+	outline-width: 0px;
+}
+
+.test:hover {
+	cursor: pointer;
+	outline-width: 2px;
 }
