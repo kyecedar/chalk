@@ -1,5 +1,3 @@
-import $ from "jquery";
-
 enum MOUSE_BUTTON { // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
 	LEFT = 0,
 	MIDDLE = 1,
@@ -108,21 +106,30 @@ export function register_listeners() {
 	window.addEventListener("mouseenter", on_mouse_enter);
 	window.addEventListener("wheel", on_wheel);
 
+	// https://github.com/tauri-apps/tauri/issues/7418
+	// https://github.com/tauri-apps/tauri/discussions/3844
+	// https://stackoverflow.com/questions/3527041/prevent-any-form-of-page-refresh-using-jquery-javascript
+	// https://stackoverflow.com/questions/2482059/disable-f5-and-browser-refresh-using-javascript
 	// prevent refresh. literally only added jquery for these 4 lines.
-	$(document).on("keydown", (evt) => {
-		if(evt.code === "F5")
-			evt.preventDefault();
-	});
+	// $(document).on("keydown", (evt) => {
+	// 	if(evt.code === "F5")
+	// 		evt.preventDefault();
+	// });
+
+	// https://stackoverflow.com/a/29847416
+	// 😀 all i needed to do was this what the fuck.
+	document.onkeydown = (evt) => {
+		// prevent refresh.
+		if(evt.code === "F5") evt.preventDefault();
+		else if(evt.ctrlKey)
+			if(evt.code === "KeyR")
+				evt.preventDefault();
+	};
 }
 
 let keydown_index: number;
 
 const on_key_down = (evt: KeyboardEvent) => {
-	// prevent refresh.
-	if(evt.ctrlKey)
-		if(evt.code === "KeyR")
-			evt.preventDefault();
-
 	_keys[evt.code] = true;
 	for(keydown_index = 0; keydown_index < _keydown_callbacks.length; ++keydown_index)
 		_keydown_callbacks[keydown_index](evt);
