@@ -43,6 +43,7 @@ const _mouseup_callbacks    : Array<MouseCallback> = [];
 const _wheel_callbacks      : Array<WheelCallback> = [];
 
 const _input = {
+	MOUSE_BUTTON,
 	key: {
 		down: (code: KeyCode): boolean => {
 			if(_keys[code]) return true;
@@ -94,7 +95,7 @@ interface KeyPressedData {
 	[key: string]: boolean;
 }
 
-export function register_listeners() {
+export async function init() {
 	// KEYBOARD.
 	window.addEventListener("keydown", on_key_down);
 	window.addEventListener("keyup", on_key_up);
@@ -115,11 +116,11 @@ export function register_listeners() {
 	// 	if(evt.code === "F5")
 	// 		evt.preventDefault();
 	// });
-
 	// https://stackoverflow.com/a/29847416
 	// 😀 all i needed to do was this what the fuck.
 	document.onkeydown = (evt) => {
 		// prevent refresh.
+		// gotta have this line first or else javascript will make me lose my fucking mind.
 		if(evt.code === "F5") evt.preventDefault();
 		else if(evt.ctrlKey)
 			if(evt.code === "KeyR")

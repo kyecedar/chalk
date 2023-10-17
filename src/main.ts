@@ -3,8 +3,8 @@ import { appWindow } from "@tauri-apps/api/window";
 
 import "./modules/logger";
 
-import { register_button_listeners } from "./modules/window";
-import { register_listeners } from "./modules/input";
+import * as win from "./modules/window";
+import * as input from "./modules/input";
 import * as board from "./modules/board";
 
 // let greetInputEl: HTMLInputElement | null;
@@ -23,28 +23,33 @@ declare global {
     var testext: HTMLDivElement;
 }
 
+let loading: HTMLDivElement;
+
 window.addEventListener("DOMContentLoaded", () => {
     globalThis.testext = (document.getElementById("testext") as HTMLDivElement)!;
+    loading = (document.getElementById("loading-view") as HTMLDivElement)!;
     appWindow.show();
 
     // TITLEBAR.
-    register_button_listeners();
+    win.init();
+
+    win.set_title("chalk. test");
 
     // INPUT.
-    register_listeners();
+    input.init();
 
     //logger.info("shit");
 
     // BOARD VIEW.
     board.init();
-    //@ts-ignore
-    console.log(window.shit);
     //canvas.animate();
 
     // CONFIG.
     // input.add_wheel_callback((evt: WheelEvent) => {
     //   if(testext) testext.innerText = evt.deltaY.toString();
     // });
+
+    loading.removeAttribute("loading");
 
     // greetInputEl = document.querySelector("#greet-input");
     // greetMsgEl = document.querySelector("#greet-msg");

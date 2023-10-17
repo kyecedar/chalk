@@ -1,10 +1,21 @@
 let boardview : HTMLDivElement;
-let scale = 1.0;
+let scribbletransform : HTMLDivElement;
+let scribbleview : HTMLDivElement;
+let scale_index : number = 4;
 
-let minscale = 0.01;
-let maxscale = 10.0;
+let scales : Array<number> = [
+	5.00,
+	3.00,
+	2.00,
+	1.50,
 
-let scalevel = 0.03;
+	1.00,
+	
+	0.75,
+	0.50,
+	0.25,
+	0.15,
+];
 
 const blocks : Array<HTMLDivElement> = [];
 
@@ -29,26 +40,51 @@ const COLORS : Array<string> = [
 	"#232323",
 ];
 
-const BLOCK_COUNT = 5000;
+const BLOCK_COUNT = 1000;
 const BLOCK_SPREAD = 2000;
-const OUTLINE_MIN = 2.0;
-const OUTLINE_MAX_SCALE = 0.5;
-const OUTLINE_MAX_WIDTH = 10;
 
-let x : number = 10;
-let y : number = 0;
-let xvel : number = 0;
-let yvel : number = 0;
+let middle_mouse: boolean = false;
+
+let x = 0;
+let y = 0;
 
 export function init() {
 	boardview = (document.getElementById("board-view") as HTMLDivElement)!;
-
-	boardview.style.top = "50%";
-	boardview.style.left = "50%";
+	scribbletransform = (document.getElementById("scribble-transform") as HTMLDivElement)!;
+	scribbleview = (document.getElementById("scribble-view") as HTMLDivElement)!;
 
 	for(let i = 0; i < BLOCK_COUNT; ++i) {
-		create_block(boardview);
+		create_block(scribbleview);
 	}
+
+	testext.innerText = scales[scale_index].toString();
+
+	input.add_wheel_callback((evt: WheelEvent) => {
+		if(evt.deltaY < 0) scale_index--;
+		else if(evt.deltaY > 1) scale_index++;
+		
+		// clamp scale index.
+		scale_index = Math.min(Math.max(scale_index, 0), scales.length - 1);
+
+		testext.innerText = scales[scale_index].toString();
+	});
+
+	input.add_mouse_callback("buttondown", (evt: MouseEvent) => {
+		if(evt.button === input.MOUSE_BUTTON.MIDDLE) middle_mouse = true;
+	});
+
+	input.add_mouse_callback("buttonup", (evt: MouseEvent) => {
+		if(evt.button === input.MOUSE_BUTTON.MIDDLE) middle_mouse = false;
+	});
+
+	input.add_mouse_callback("mousemove", (evt: MouseEvent) => {
+		if(middle_mouse) {
+			x += evt.movementX;
+			y += evt.movementY;
+			scribbletransform.style.left = `${x}px`;
+			scribbletransform.style.top = `${y}px`;
+		}
+	});
 
 	loop();
 };
@@ -74,25 +110,7 @@ function loop() {
 }
 
 function update() {
-	if(scale > maxscale || scale < minscale) scalevel = -scalevel;
-	scale += scalevel;
-	boardview.style.scale = scale.toString();
-
-	xvel = 0;
-	if(input.key.down("KeyA")) xvel = -1;
-	if(input.key.down("KeyD")) xvel =  1;
-	
-	yvel = 0;
-	if(input.key.down("KeyW")) yvel = -1;
-	if(input.key.down("KeyS")) yvel =  1;
-
-	x += xvel;
-	y += yvel;
-	//console.log(x, " ", y);
-	testext.style.left = `${x}px`;
-	testext.style.top = `${y}px`;
-	//console.log(Math.random());
-	//console.log(scale);
+	scribbleview.style.scale = scales[scale_index].toString();
 }
 
 function render() {
