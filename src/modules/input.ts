@@ -1,8 +1,8 @@
 enum MOUSE_BUTTON { // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
-	LEFT = 0,
-	MIDDLE = 1,
-	RIGHT = 2,
-	BACK = 3,
+	LEFT    = 0,
+	MIDDLE  = 1,
+	RIGHT   = 2,
+	BACK    = 3,
 	FORWARD = 4,
 }
 
@@ -31,63 +31,68 @@ type WheelCallback = (event: WheelEvent) => void;
 type KeyInputName = "keydown" | "keyup";
 type MouseInputName = "mousemove" | "mouseenter" | "buttondown" | "buttonup";
 
-const _keys : KeyPressedData = {};
-const _buttons : Array<boolean> = new Array<boolean>(5);
+const keys : KeyPressedData = {};
+const buttons : Array<boolean> = new Array<boolean>(5);
 
-const _keydown_callbacks    : Array<KeyCallback>   = [];
-const _keyup_callbacks      : Array<KeyCallback>   = [];
-const _mousemove_callbacks  : Array<MouseCallback> = [];
-const _mouseenter_callbacks : Array<MouseCallback> = [];
-const _mousedown_callbacks  : Array<MouseCallback> = [];
-const _mouseup_callbacks    : Array<MouseCallback> = [];
-const _wheel_callbacks      : Array<WheelCallback> = [];
+const keyDownCallbacks    : Array<KeyCallback>   = [];
+const keyUpCallbacks      : Array<KeyCallback>   = [];
+const mouseMoveCallbacks  : Array<MouseCallback> = [];
+const mouseEnterCallbacks : Array<MouseCallback> = [];
+const mouseDownCallbacks  : Array<MouseCallback> = [];
+const mouseUpCallbacks    : Array<MouseCallback> = [];
+const wheelCallbacks      : Array<WheelCallback> = [];
 
 const _input = {
 	MOUSE_BUTTON,
 	key: {
 		down: (code: KeyCode): boolean => {
-			if(_keys[code]) return true;
+			if(keys[code]) return true;
 			return false;
 		},
 	},
 	mouse: {
+		left: false,
+		middle: false,
+		right: false,
+		back: false,
+		forward: false,
 		pos: {
 			x: 0,
 			y: 0,
 		},
 		down: (code: MOUSE_BUTTON): boolean => {
-			if(_buttons[code]) return true;
+			if(buttons[code]) return true;
 			return false;
 		},
 	},
-	add_key_callback: (event: KeyInputName, callback: KeyCallback) => {
+	add_key_callback: (event: KeyInputName, callback: KeyCallback): void => {
 		switch(event) {
 			case "keydown":
-				_keydown_callbacks.push(callback);
+				keyDownCallbacks.push(callback);
 				break;
 			case "keyup":
-				_keyup_callbacks.push(callback);
+				keyUpCallbacks.push(callback);
 				break;
 		}
 	},
-	add_mouse_callback: (event: MouseInputName, callback: MouseCallback) => {
+	add_mouse_callback: (event: MouseInputName, callback: MouseCallback): void => {
 		switch(event) {
 			case "mousemove":
-				_mousemove_callbacks.push(callback);
+				mouseMoveCallbacks.push(callback);
 				break;
 			case "mouseenter":
-				_mouseenter_callbacks.push(callback);
+				mouseEnterCallbacks.push(callback);
 				break;
 			case "buttondown":
-				_mousedown_callbacks.push(callback);
+				mouseDownCallbacks.push(callback);
 				break;
 			case "buttonup":
-				_mouseup_callbacks.push(callback);
+				mouseUpCallbacks.push(callback);
 				break;
 		}
 	},
-	add_wheel_callback: (callback: WheelCallback) => {
-		_wheel_callbacks.push(callback);
+	add_wheel_callback: (callback: WheelCallback): void => {
+		wheelCallbacks.push(callback);
 	},
 };
 
@@ -95,7 +100,7 @@ interface KeyPressedData {
 	[key: string]: boolean;
 }
 
-export async function init() {
+export async function init(): Promise<void> {
 	// KEYBOARD.
 	window.addEventListener("keydown", on_key_down);
 	window.addEventListener("keyup", on_key_up);
@@ -106,83 +111,78 @@ export async function init() {
 	window.addEventListener("mouseup", on_mouse_up);
 	window.addEventListener("mouseenter", on_mouse_enter);
 	window.addEventListener("wheel", on_wheel);
-
-	// https://github.com/tauri-apps/tauri/issues/7418
-	// https://github.com/tauri-apps/tauri/discussions/3844
-	// https://stackoverflow.com/questions/3527041/prevent-any-form-of-page-refresh-using-jquery-javascript
-	// https://stackoverflow.com/questions/2482059/disable-f5-and-browser-refresh-using-javascript
-	// prevent refresh. literally only added jquery for these 4 lines.
-	// $(document).on("keydown", (evt) => {
-	// 	if(evt.code === "F5")
-	// 		evt.preventDefault();
-	// });
-	// https://stackoverflow.com/a/29847416
-	// 😀 all i needed to do was this what the fuck.
-	document.onkeydown = (evt) => {
-		// prevent refresh.
-		// gotta have this line first or else javascript will make me lose my fucking mind.
-		if(evt.code === "F5") evt.preventDefault();
-		else if(evt.ctrlKey)
-			if(evt.code === "KeyR")
-				evt.preventDefault();
-	};
 }
 
-let keydown_index: number;
-
-const on_key_down = (evt: KeyboardEvent) => {
-	_keys[evt.code] = true;
-	for(keydown_index = 0; keydown_index < _keydown_callbacks.length; ++keydown_index)
-		_keydown_callbacks[keydown_index](evt);
+let keyDownIndex: number;
+const on_key_down = (evt: KeyboardEvent): void => {
+	keys[evt.code] = true;
+	for(keyDownIndex = 0; keyDownIndex < keyDownCallbacks.length; ++keyDownIndex)
+		keyDownCallbacks[keyDownIndex](evt);
 };
 
-let keyup_index: number;
-
-const on_key_up = (evt: KeyboardEvent) => {
-	_keys[evt.code] = false;
-	for(keyup_index = 0; keyup_index < _keyup_callbacks.length; ++keyup_index)
-		_keyup_callbacks[keyup_index](evt);
+let keyUpIndex: number;
+const on_key_up = (evt: KeyboardEvent): void => {
+	keys[evt.code] = false;
+	for(keyUpIndex = 0; keyUpIndex < keyUpCallbacks.length; ++keyUpIndex)
+		keyUpCallbacks[keyUpIndex](evt);
 };
 
-let mousemove_index: number;
-
-const on_mouse_move = (evt: MouseEvent) => {
+let mouseMoveIndex: number;
+const on_mouse_move = (evt: MouseEvent): void => {
 	input.mouse.pos.x = evt.clientX;
 	input.mouse.pos.y = evt.clientY;
-	for(mousemove_index = 0; mousemove_index < _mousemove_callbacks.length; ++mousemove_index)
-		_mousemove_callbacks[mousemove_index](evt);
+	for(mouseMoveIndex = 0; mouseMoveIndex < mouseMoveCallbacks.length; ++mouseMoveIndex)
+		mouseMoveCallbacks[mouseMoveIndex](evt);
 };
 
-let mousedown_index: number;
-
-const on_mouse_down = (evt: MouseEvent) => {
-	_buttons[evt.button] = true;
-	for(mousedown_index = 0; mousedown_index < _mousedown_callbacks.length; ++mousedown_index)
-		_mousedown_callbacks[mousedown_index](evt);
+let mouseDownIndex: number;
+const on_mouse_down = (evt: MouseEvent): void => {
+	buttons[evt.button] = true;
+	moust_button_handler(evt.button, true);
+	for(mouseDownIndex = 0; mouseDownIndex < mouseDownCallbacks.length; ++mouseDownIndex)
+		mouseDownCallbacks[mouseDownIndex](evt);
 };
 
-let mouseup_index: number;
-
-const on_mouse_up = (evt: MouseEvent) => {
-	_buttons[evt.button] = false;
-	for(mouseup_index = 0; mouseup_index < _mouseup_callbacks.length; ++mouseup_index)
-		_mouseup_callbacks[mouseup_index](evt);
+let mouseUpIndex: number;
+const on_mouse_up = (evt: MouseEvent): void => {
+	buttons[evt.button] = false;
+	moust_button_handler(evt.button, false);
+	for(mouseUpIndex = 0; mouseUpIndex < mouseUpCallbacks.length; ++mouseUpIndex)
+		mouseUpCallbacks[mouseUpIndex](evt);
 };
 
-let mouseenter_index: number;
-
-const on_mouse_enter = (evt: MouseEvent) => {
+let mouseEnterIndex: number;
+const on_mouse_enter = (evt: MouseEvent): void => {
 	on_mouse_move(evt);
-	for(mouseenter_index = 0; mouseenter_index < _mouseenter_callbacks.length; ++mouseenter_index)
-		_mouseenter_callbacks[mouseenter_index](evt);
+	for(mouseEnterIndex = 0; mouseEnterIndex < mouseEnterCallbacks.length; ++mouseEnterIndex)
+		mouseEnterCallbacks[mouseEnterIndex](evt);
 };
 
-let wheel_index: number;
-
+let wheelIndex: number;
 // https://stackoverflow.com/a/67308650
-const on_wheel = (evt: WheelEvent) => {
-	for(wheel_index = 0; wheel_index < _wheel_callbacks.length; ++wheel_index)
-		_wheel_callbacks[wheel_index](evt);
+const on_wheel = (evt: WheelEvent): void => {
+	for(wheelIndex = 0; wheelIndex < wheelCallbacks.length; ++wheelIndex)
+		wheelCallbacks[wheelIndex](evt);
+};
+
+const moust_button_handler = (code: number, down: boolean): void => {
+	switch(code) {
+		case MOUSE_BUTTON.LEFT:
+			_input.mouse.left = down;
+			return;
+		case MOUSE_BUTTON.MIDDLE:
+			_input.mouse.middle = down;
+			return;
+		case MOUSE_BUTTON.RIGHT:
+			_input.mouse.right = down;
+			return;
+		case MOUSE_BUTTON.BACK:
+			_input.mouse.back = down;
+			return;
+		case MOUSE_BUTTON.FORWARD:
+			_input.mouse.forward = down;
+			return;
+	}
 };
 
 declare global {

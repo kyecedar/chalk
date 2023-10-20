@@ -1,119 +1,145 @@
-let boardview : HTMLDivElement;
-let scribbletransform : HTMLDivElement;
-let scribbleview : HTMLDivElement;
-let scale_index : number = 4;
+let elemBoard       : HTMLDivElement;
+let elemCenterer    : HTMLDivElement;
+let elemTranslation : HTMLDivElement;
+let elemZoom        : HTMLDivElement;
 
-let scales : Array<number> = [
-	5.00,
-	3.00,
-	2.00,
-	1.50,
+let zoomMin          : number = 0.20;
+let zoomMax          : number = 5.50;
+let zoomTowardsDelta : number = 1.00;
+let zoomAwayDelta    : number = 0.20;
+let zoomIndex        : number = 0; // positive for zoom in, negative for zoom out.
 
-	1.00,
+let x : number = 0;
+let y : number = 0;
+
+const _board = {
+	/**
+	 * Teleports user view to location.
+	 * @param x 
+	 * @param y 
+	 */
+	teleport: (x: number, y: number): void => {
+		set_position(x, y);
+	},
+
+	hovered: (): boolean => {
+		return elemBoard.matches(":hover");
+	},
+
+	get_zoom_index_min: (): number => {
+		return Math.ceil((1 - zoomMin) / zoomAwayDelta);
+	},
+	get_zoom_index_max: (): number => {
+		return Math.max(Math.ceil(zoomMax / zoomTowardsDelta) - 1, 0);
+	},
 	
-	0.75,
-	0.50,
-	0.25,
-	0.15,
-];
-
-const blocks : Array<HTMLDivElement> = [];
-
-const COLORS : Array<string> = [
-	"#ca563e",
-	"#e8864e",
-	"#f1ba8e",
-	"#ecd999",
-	"#f1f0d9",
-	"#a5dbd0",
-	"#94c1ba",
-	"#4ea9c1",
-	"#373b42",
-	"#847b8f",
-	"#6d423e",
-	"#8f6540",
-	"#aa8537",
-	"#e7b550",
-	"#a4ad67",
-	"#649451",
-	"#3e6b5a",
-	"#232323",
-];
-
-const BLOCK_COUNT = 1000;
-const BLOCK_SPREAD = 2000;
-
-let middle_mouse: boolean = false;
-
-let x = 0;
-let y = 0;
-
-export function init() {
-	boardview = (document.getElementById("board-view") as HTMLDivElement)!;
-	scribbletransform = (document.getElementById("scribble-transform") as HTMLDivElement)!;
-	scribbleview = (document.getElementById("scribble-view") as HTMLDivElement)!;
-
-	for(let i = 0; i < BLOCK_COUNT; ++i) {
-		create_block(scribbleview);
-	}
-
-	testext.innerText = scales[scale_index].toString();
-
-	input.add_wheel_callback((evt: WheelEvent) => {
-		if(evt.deltaY < 0) scale_index--;
-		else if(evt.deltaY > 1) scale_index++;
-		
-		// clamp scale index.
-		scale_index = Math.min(Math.max(scale_index, 0), scales.length - 1);
-
-		testext.innerText = scales[scale_index].toString();
-	});
-
-	input.add_mouse_callback("buttondown", (evt: MouseEvent) => {
-		if(evt.button === input.MOUSE_BUTTON.MIDDLE) middle_mouse = true;
-	});
-
-	input.add_mouse_callback("buttonup", (evt: MouseEvent) => {
-		if(evt.button === input.MOUSE_BUTTON.MIDDLE) middle_mouse = false;
-	});
-
-	input.add_mouse_callback("mousemove", (evt: MouseEvent) => {
-		if(middle_mouse) {
-			x += evt.movementX;
-			y += evt.movementY;
-			scribbletransform.style.left = `${x}px`;
-			scribbletransform.style.top = `${y}px`;
-		}
-	});
-
-	loop();
+	set_zoom_min: (value: number): void => {
+		zoomMin = value;
+		elemBoard.style.setProperty("--zoom-min", zoomMin.toString());
+	},
+	set_zoom_max: (value: number): void => {
+		zoomMax = value;
+		elemBoard.style.setProperty("--zoom-max", zoomMax.toString());
+	},
+	set_zoom_index: (value: number): void => {
+		zoomIndex = (value < 0) ?
+			Math.max(value, _board.get_zoom_index_min()) :
+			Math.min(value, _board.get_zoom_index_max());
+		elemBoard.style.setProperty("--zoom-index", zoomIndex.toString());
+	},
+	set_zoom_towards_delta: (value: number): void => {
+		zoomTowardsDelta = value;
+		elemBoard.style.setProperty("--zoom-towards-delta", zoomTowardsDelta.toString());
+	},
+	set_zoom_away_delta: (value: number): void => {
+		zoomAwayDelta = value;
+		elemBoard.style.setProperty("--zoom-away-delta", zoomAwayDelta.toString());
+	},
 };
 
-function create_block(parent: HTMLDivElement) {
-	let div = document.createElement("div");
+export function init(): void {
+	// ELEMENTS.
+	elemBoard = (document.getElementById("board") as HTMLDivElement)!;
+	elemCenterer = (document.querySelector("#board > .centerer") as HTMLDivElement)!;
+	elemTranslation = (document.getElementById("scribble-translation") as HTMLDivElement)!;
+	elemZoom = (document.getElementById("scribble-zoom") as HTMLDivElement)!;
 
-	div.style.backgroundColor = COLORS[Math.floor(Math.random() * COLORS.length)] + "33";
-	div.setAttribute("class", "test");
-	//div.innerText = "bingus";
-	div.style.top = (Math.round(Math.random() * BLOCK_SPREAD - (BLOCK_SPREAD / 2)) + "px");
-	div.style.left = (Math.round(Math.random() * BLOCK_SPREAD - (BLOCK_SPREAD / 2)) + "px");
+	// LISTENERS.
+	input.add_wheel_callback(on_zoom);
+	input.add_mouse_callback("mousemove", on_drag);
 
-	blocks.push(div);
-	parent.appendChild(div);
+	// DEFAULTS.
+	_board.set_zoom_min(zoomMin);
+	_board.set_zoom_max(zoomMax);
+	_board.set_zoom_index(zoomIndex);
+	_board.set_zoom_towards_delta(zoomTowardsDelta);
+	_board.set_zoom_away_delta(zoomAwayDelta);
+
+	console.log(_board.get_zoom_index_max());
 }
 
-function loop() {
-	requestAnimationFrame(loop);
-	
-	update();
-	render();
+function on_zoom(evt: WheelEvent): void {
+	// TODO:
+	//     get scale change.
+	//     get position delta.
+	//     add position delta to current position.
+	//     set scribble scale.
+
+	// subtract centerer position to mouse to get mouse offset from center.
+	elemCenterer.getBoundingClientRect().x;
 }
 
-function update() {
-	scribbleview.style.scale = scales[scale_index].toString();
+function on_drag(evt: MouseEvent): void {
+	if(input.mouse.middle) {
+		x += evt.movementX;
+		y += evt.movementY;
+		set_position(x, y);
+	}
 }
 
-function render() {
+/**
+ * Get processed zoom value from index multiplied by "away" or "towards" deltas.
+ * @returns Processed zoom value.
+ */
+const get_zoom = (): number => {
+	return (zoomIndex < 0) ? Math.max(1 - (zoomIndex * -1) * zoomAwayDelta, zoomMin) : Math.min((zoomIndex + 1) * zoomTowardsDelta, zoomMax);
+};
+
+/**
+ * Zooms board.
+ * @param zoom 
+ * @param x Offset from center.
+ * @param y Offset from center.
+ */
+const set_zoom = (zoom: number, x: number = 0, y: number = 0): void => {
+
+};
+
+/**
+ * Get processed position by multiplying it by scale.
+ * @returns Processed position.
+ */
+const get_position = (x: number, y: number): Position => {
+	return {
+		x: x * get_zoom(),
+		y: y * get_zoom(),
+	};
+};
+
+/**
+ * Sets view position on board.
+ * @param x Absolute value, not affected by scale.
+ * @param y Absolute value, not affected by scale.
+ */
+const set_position = (x: number, y: number): void => {
+	elemTranslation.style.left = `${x}px`;
+	elemTranslation.style.top  = `${y}px`;
+};
+
+declare global {
+	var board: typeof _board;
 }
+
+globalThis.board = _board;
 
 export {};

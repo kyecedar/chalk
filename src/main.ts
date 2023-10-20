@@ -1,60 +1,51 @@
 //import { invoke } from "@tauri-apps/api/tauri";
 import { appWindow } from "@tauri-apps/api/window";
 
+import "./modules/util";
 import "./modules/logger";
 
-import * as win from "./modules/window";
-import * as input from "./modules/input";
-import * as board from "./modules/board";
-
-// let greetInputEl: HTMLInputElement | null;
-// let greetMsgEl: HTMLElement | null;
+import * as modWindow from "./modules/window";
+import * as modInput from "./modules/input";
+import * as modBoard from "./modules/board";
 
 // async function greet() {
-  // if(!(greetMsgEl && greetInputEl)) return;
-  
-  // // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-  // greetMsgEl.textContent = await invoke("greet", {
-  //   name: greetInputEl.value,
-  // });
+	// if(!(greetMsgEl && greetInputEl)) return;
+	
+	// // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
+	// greetMsgEl.textContent = await invoke("greet", {
+	//   name: greetInputEl.value,
+	// });
 // }
 
-declare global {
-    var testext: HTMLDivElement;
-}
-
-let loading: HTMLDivElement;
+let elemRoot: HTMLHtmlElement;
 
 window.addEventListener("DOMContentLoaded", () => {
-    globalThis.testext = (document.getElementById("testext") as HTMLDivElement)!;
-    loading = (document.getElementById("loading-view") as HTMLDivElement)!;
-    appWindow.show();
+	elemRoot = (document.querySelector(":root") as HTMLHtmlElement)!;
+	appWindow.show();
 
-    // TITLEBAR.
-    win.init();
+	// https://github.com/tauri-apps/tauri/issues/7418
+	// https://github.com/tauri-apps/tauri/discussions/3844
+	// https://stackoverflow.com/questions/3527041/prevent-any-form-of-page-refresh-using-jquery-javascript
+	// https://stackoverflow.com/questions/2482059/disable-f5-and-browser-refresh-using-javascript
+	// https://stackoverflow.com/a/29847416
+	// 😀 ghah yeah ig.
+	document.onkeydown = (evt: KeyboardEvent): void => {
+		// prevent refresh.
+		if(evt.code === "F5") return evt.preventDefault();
+		if(evt.ctrlKey && evt.code === "KeyR") return evt.preventDefault();
+	};
 
-    win.set_title("chalk. test");
+	// TITLEBAR.
+	modWindow.init();
 
-    // INPUT.
-    input.init();
+	win.set_title("chalk. test");
 
-    //logger.info("shit");
+	// INPUT.
+	modInput.init();
 
-    // BOARD VIEW.
-    board.init();
-    //canvas.animate();
+	// BOARD VIEW.
+	modBoard.init();
 
-    // CONFIG.
-    // input.add_wheel_callback((evt: WheelEvent) => {
-    //   if(testext) testext.innerText = evt.deltaY.toString();
-    // });
-
-    loading.removeAttribute("loading");
-
-    // greetInputEl = document.querySelector("#greet-input");
-    // greetMsgEl = document.querySelector("#greet-msg");
-    // document.querySelector("#greet-form")?.addEventListener("submit", (e) => {
-    //   e.preventDefault();
-    //   greet();
-    // });
+	// DONE.
+	elemRoot.removeAttribute("loading");
 });

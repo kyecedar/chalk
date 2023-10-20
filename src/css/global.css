@@ -7,3 +7,18 @@
 @import url(/src/assets/fonts/SpaceMonoNerd.css);
 
 @import url(/src/assets/fonts/NerdFont.css);
+
+
+
+/* UTIL.
+*/
+
+.container {
+	position: relative;
+}
+
+.centerer {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+}

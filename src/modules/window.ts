@@ -1,54 +1,73 @@
 import { appWindow } from "@tauri-apps/api/window";
 
-let taskbar: HTMLDivElement;
-let taskbar_title: HTMLSpanElement;
-let minimize_button: HTMLButtonElement;
-let maximize_button: HTMLButtonElement;
-let close_button: HTMLButtonElement;
+let elemTaskbar  : HTMLDivElement;
+let elemTitle    : HTMLSpanElement;
+let elemMinimize : HTMLButtonElement;
+let elemMaximize : HTMLButtonElement;
+let elemClose    : HTMLButtonElement;
 
-async function minimize_window() {
-	appWindow.minimize();
-}
+const _win = {
+	minimize: async (): Promise<void> => {
+		return minimize_window();
+	},
+	maximize: (): Promise<void> => {
+		return maximize_window();
+	},
+	close: (): Promise<void> => {
+		return close_window();
+	},
 
-async function update_maximize_attribute() {
-	if(await appWindow.isMaximized()) taskbar?.setAttribute("maximized", "");
-	else taskbar?.removeAttribute("maximized");
-}
-
-async function maximize_window() {
-	appWindow.toggleMaximize();
-}
-
-async function close_window() {
-	// TODO: show warning if needed.
-
-	appWindow.hide(); // hide window for quick-lookin close.
-
-	// TODO: save everything first.
-
-	appWindow.close();
-}
+	set_title: async (value: string): Promise<void> => {
+		elemTitle.innerText = value;
+		return appWindow.setTitle(value);
+	},
+};
 
 export async function init() {
-	taskbar = (document.getElementById("window-titlebar") as HTMLDivElement)!;
-	taskbar_title = (document.getElementById("window-title") as HTMLSpanElement)!;
-	minimize_button = (document.querySelector("#window-titlebar .minimize") as HTMLButtonElement)!;
-	maximize_button = (document.querySelector("#window-titlebar .maximize") as HTMLButtonElement)!;
-	close_button = (document.querySelector("#window-titlebar .close") as HTMLButtonElement)!;
+	elemTaskbar  = (document.getElementById("window-titlebar") as HTMLDivElement)!;
+	elemTitle    = (document.getElementById("window-title") as HTMLSpanElement)!;
+	elemMinimize = (document.querySelector("#window-titlebar .minimize") as HTMLButtonElement)!;
+	elemMaximize = (document.querySelector("#window-titlebar .maximize") as HTMLButtonElement)!;
+	elemClose    = (document.querySelector("#window-titlebar .close") as HTMLButtonElement)!;
 
 	register_button_listeners();
 }
 
 async function register_button_listeners() {
-	minimize_button?.addEventListener("click", minimize_window);
-	maximize_button?.addEventListener("click", maximize_window);
-	close_button?.addEventListener("click", close_window);
-
-	if(maximize_button)
-		appWindow.onResized(update_maximize_attribute);
+	elemMinimize.addEventListener("click", minimize_window);
+	elemMaximize.addEventListener("click", maximize_window);
+	elemClose.addEventListener("click", close_window);
+	
+	appWindow.onResized(update_maximize_attribute);
 }
 
-export async function set_title(title: string) {
-	taskbar_title.innerText = title;
-	await appWindow.setTitle(title);
+async function minimize_window(): Promise<void> {
+	return appWindow.minimize();
 }
+
+async function update_maximize_attribute() {
+	if(await appWindow.isMaximized()) elemTaskbar?.setAttribute("maximized", "");
+	else elemTaskbar?.removeAttribute("maximized");
+}
+
+async function maximize_window(): Promise<void> {
+	return appWindow.toggleMaximize();
+}
+
+async function close_window(): Promise<void> {
+	// TODO: show warning if needed.
+
+	await appWindow.hide(); // hide window for quick-lookin close.
+
+	// TODO: save everything first.
+
+	return appWindow.close();
+}
+
+declare global {
+	var win: typeof _win;
+}
+
+globalThis.win = _win;
+
+export {};
