@@ -1,16 +1,15 @@
-let elemBoard       : HTMLDivElement;
-let elemCenterer    : HTMLDivElement;
-let elemTranslation : HTMLDivElement;
-let elemZoom        : HTMLDivElement;
+let elemBoard     : HTMLDivElement;
+let elemCenterer  : HTMLDivElement;
+let elemTransform : HTMLDivElement;
+let elemContent   : HTMLDivElement;
 
 let zoomMin          : number = 0.20;
-let zoomMax          : number = 5.50;
+let zoomMax          : number = 5.00;
 let zoomTowardsDelta : number = 1.00;
 let zoomAwayDelta    : number = 0.20;
 let zoomIndex        : number = 0; // positive for zoom in, negative for zoom out.
 
-let x : number = 0;
-let y : number = 0;
+let position : Vector = new Vector();
 
 const _board = {
 	/**
@@ -27,7 +26,7 @@ const _board = {
 	},
 
 	get_zoom_index_min: (): number => {
-		return Math.ceil((1 - zoomMin) / zoomAwayDelta);
+		return Math.floor((1 - zoomMin) / -zoomAwayDelta);
 	},
 	get_zoom_index_max: (): number => {
 		return Math.max(Math.ceil(zoomMax / zoomTowardsDelta) - 1, 0);
@@ -42,8 +41,8 @@ const _board = {
 		elemBoard.style.setProperty("--zoom-max", zoomMax.toString());
 	},
 	set_zoom_index: (value: number): void => {
-		zoomIndex = (value < 0) ?
-			Math.max(value, _board.get_zoom_index_min()) :
+		zoomIndex = (value < 0) ? 
+			Math.max(value, _board.get_zoom_index_min()) : 
 			Math.min(value, _board.get_zoom_index_max());
 		elemBoard.style.setProperty("--zoom-index", zoomIndex.toString());
 	},
@@ -57,17 +56,56 @@ const _board = {
 	},
 };
 
+const BLOCK_SPREAD = 1000;
+const BLOCK_COUNT = 100;
+
+const COLORS : Array<string> = [
+	"#ca563e",
+	"#e8864e",
+	"#f1ba8e",
+	"#ecd999",
+	"#f1f0d9",
+	"#a5dbd0",
+	"#94c1ba",
+	"#4ea9c1",
+	"#373b42",
+	"#847b8f",
+	"#6d423e",
+	"#8f6540",
+	"#aa8537",
+	"#e7b550",
+	"#a4ad67",
+	"#649451",
+	"#3e6b5a",
+	"#232323",
+];
+
+function create_block(parent: HTMLDivElement) {
+	let div = document.createElement("div");
+
+	div.style.backgroundColor = COLORS[Math.floor(Math.random() * COLORS.length)] + "33";
+	div.setAttribute("class", "test");
+	//div.innerText = "bingus";
+	div.style.top = (Math.round(Math.random() * BLOCK_SPREAD - (BLOCK_SPREAD / 2)) + "px");
+	div.style.left = (Math.round(Math.random() * BLOCK_SPREAD - (BLOCK_SPREAD / 2)) + "px");
+
+	parent.appendChild(div);
+}
+
 export function init(): void {
 	// ELEMENTS.
 	elemBoard = (document.getElementById("board") as HTMLDivElement)!;
 	elemCenterer = (document.querySelector("#board > .centerer") as HTMLDivElement)!;
-	elemTranslation = (document.getElementById("scribble-translation") as HTMLDivElement)!;
-	elemZoom = (document.getElementById("scribble-zoom") as HTMLDivElement)!;
+	elemTransform = (document.getElementById("board-transform") as HTMLDivElement)!;
+	elemContent = (document.getElementById("board-content") as HTMLDivElement)!;
+
+	for(let i = 0; i < BLOCK_COUNT; ++i) create_block(elemContent);
 
 	// LISTENERS.
+	elemBoard.addEventListener("resize", on_window_resize);
 	input.add_wheel_callback(on_zoom);
 	input.add_mouse_callback("mousemove", on_drag);
-
+	
 	// DEFAULTS.
 	_board.set_zoom_min(zoomMin);
 	_board.set_zoom_max(zoomMax);
@@ -75,36 +113,58 @@ export function init(): void {
 	_board.set_zoom_towards_delta(zoomTowardsDelta);
 	_board.set_zoom_away_delta(zoomAwayDelta);
 
-	console.log(_board.get_zoom_index_max());
+	on_window_resize();
 }
 
+const on_window_resize = (_evt?: UIEvent): void => {
+};
+
+let _deltaY    : -1 | 1;
+let _cRect     : DOMRect; // content rect.
+const _mOffset : Vector = new Vector(); // mouse offset.
 function on_zoom(evt: WheelEvent): void {
-	// TODO:
-	//     get scale change.
-	//     get position delta.
-	//     add position delta to current position.
-	//     set scribble scale.
+	if(evt.deltaY > 0) _deltaY = -1;
+	else if(evt.deltaY < 0) _deltaY = 1;
+	else return;
+
+	_cRect = elemContent.getBoundingClientRect();
 
 	// subtract centerer position to mouse to get mouse offset from center.
-	elemCenterer.getBoundingClientRect().x;
+	_mOffset.x = input.mouse.pos.x - _cRect.x;
+	_mOffset.y = input.mouse.pos.y - _cRect.y;
+
+	set_zoom(get_zoom(zoomIndex + _deltaY), _mOffset.x, _mOffset.y);
 }
 
 function on_drag(evt: MouseEvent): void {
 	if(input.mouse.middle) {
-		x += evt.movementX;
-		y += evt.movementY;
-		set_position(x, y);
+		position.x += evt.movementX
+		position.y += evt.movementY;
+		set_position(position);
 	}
 }
 
 /**
  * Get processed zoom value from index multiplied by "away" or "towards" deltas.
  * @returns Processed zoom value.
+ * @param index Get zoom value of.
  */
-const get_zoom = (): number => {
-	return (zoomIndex < 0) ? Math.max(1 - (zoomIndex * -1) * zoomAwayDelta, zoomMin) : Math.min((zoomIndex + 1) * zoomTowardsDelta, zoomMax);
+const get_zoom = (index: number = zoomIndex): number => {
+	return (index < 0) ? 
+		Math.max(1 - (index * -1) * zoomAwayDelta, zoomMin) : 
+		Math.min((index + 1) * zoomTowardsDelta, zoomMax);
 };
 
+const get_zoom_index = (zoom?: number): number => {
+	if(zoom === undefined) return zoomIndex;
+
+	return (zoom < 1) ? 
+		Math.round((1 - zoom) / -zoomAwayDelta) : 
+		Math.round(zoom / zoomTowardsDelta - 1);
+};
+
+let _zoomChange : number;
+const _zOffset  : Vector = new Vector(); // zoomed mouse offset.
 /**
  * Zooms board.
  * @param zoom 
@@ -112,29 +172,60 @@ const get_zoom = (): number => {
  * @param y Offset from center.
  */
 const set_zoom = (zoom: number, x: number = 0, y: number = 0): void => {
+	// SUMMARY: keep distance relative to position while scaling.
 
+	zoom = Math.min(Math.max(get_zoom(get_zoom_index(zoom)), zoomMin), zoomMax);
+	if(zoom == get_zoom()) return;
+
+	_zoomChange = zoom / get_zoom();
+
+	_zOffset.x += x - (x * _zoomChange);
+	_zOffset.y += y - (y * _zoomChange);
+
+	// add offset onto position.
+	_board.set_zoom_index(get_zoom_index(zoom));
+	elemContent.style.transform = `translate(${Math.round(_zOffset.x)}px, ${Math.round(_zOffset.y)}px) scale(${zoom})`;
 };
 
+function get_position(x: number, y: number): Position;
+function get_position(vec: Vector): Position;
+function get_position(pos: Position): Position;
 /**
  * Get processed position by multiplying it by scale.
  * @returns Processed position.
  */
-const get_position = (x: number, y: number): Position => {
+function get_position(x: number | Vector | Position, y?: number): Position {
+	if(x instanceof Vector || typeof(x) === "object") {
+		return {
+			x: x.x * get_zoom(),
+			y: x.y * get_zoom(),
+		}
+	}
+
 	return {
 		x: x * get_zoom(),
-		y: y * get_zoom(),
+		y: y! * get_zoom(),
 	};
-};
+}
 
+function set_position(x: number, y: number): void;
+function set_position(vec: Vector): void;
+function set_position(pos: Position): void;
 /**
  * Sets view position on board.
  * @param x Absolute value, not affected by scale.
  * @param y Absolute value, not affected by scale.
  */
-const set_position = (x: number, y: number): void => {
-	elemTranslation.style.left = `${x}px`;
-	elemTranslation.style.top  = `${y}px`;
-};
+function set_position(x: number | Vector | Position, y?: number): void {
+	if(x instanceof Vector || typeof(x) === "object") {
+		elemTransform.style.left = `${x.x}px`;
+		elemTransform.style.top  = `${x.y}px`;
+		return;
+	}
+	
+	elemTransform.style.left = `${x}px`;
+	elemTransform.style.top  = `${y!}px`;
+}
 
 declare global {
 	var board: typeof _board;

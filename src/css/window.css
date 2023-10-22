@@ -179,11 +179,11 @@ body {
 	height: 100%;
 }
 
-#scribble-translation {
+#board-transform {
 	position: absolute;
 }
 
-#scribble-zoom {
+#board-content {
 	position: absolute;
 	width: 10px;
 	height: 10px;

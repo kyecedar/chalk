@@ -4,8 +4,8 @@ import { appWindow } from "@tauri-apps/api/window";
 import "./modules/util";
 import "./modules/logger";
 
-import * as modWindow from "./modules/window";
 import * as modInput from "./modules/input";
+import * as modWindow from "./modules/window";
 import * as modBoard from "./modules/board";
 
 // async function greet() {
