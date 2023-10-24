@@ -8,10 +8,32 @@
 
 @import url(/src/assets/fonts/NerdFont.css);
 
+:root {
+	--user-select: auto;
 
+	--color-cyan    : #00AEEF;
+	--color-magenta : #EC008C;
+	--color-yellow  : #FFF200;
+	--color-key     : #231F20;
+
+	font-family: "SpaceGrotesk";
+	font-weight: 400;
+	font-size: 16px;
+
+	color: var(--color-key);
+}
 
 /* UTIL.
 */
+
+* {
+	-webkit-touch-callout: var(--user-select);
+    -webkit-user-select: var(--user-select);
+    -khtml-user-select: var(--user-select);
+    -moz-user-select: var(--user-select);
+    -ms-user-select: var(--user-select);
+    user-select: var(--user-select);
+}
 
 .container {
 	position: relative;

@@ -23,6 +23,7 @@ window.addEventListener("DOMContentLoaded", () => {
 	elemRoot = (document.querySelector(":root") as HTMLHtmlElement)!;
 	appWindow.show();
 
+	// prevent refresh.
 	// https://github.com/tauri-apps/tauri/issues/7418
 	// https://github.com/tauri-apps/tauri/discussions/3844
 	// https://stackoverflow.com/questions/3527041/prevent-any-form-of-page-refresh-using-jquery-javascript
@@ -30,9 +31,13 @@ window.addEventListener("DOMContentLoaded", () => {
 	// https://stackoverflow.com/a/29847416
 	// 😀 ghah yeah ig.
 	document.onkeydown = (evt: KeyboardEvent): void => {
-		// prevent refresh.
 		if(evt.code === "F5") return evt.preventDefault();
 		if(evt.ctrlKey && evt.code === "KeyR") return evt.preventDefault();
+	};
+
+	// prevents right click menu.
+	document.oncontextmenu = (_evt?: MouseEvent): boolean => {
+		return false;
 	};
 
 	// TITLEBAR.

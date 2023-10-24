@@ -1,3 +1,5 @@
+//#region // 󰫧 VARIABLES.
+
 let elemBoard     : HTMLDivElement;
 let elemCenterer  : HTMLDivElement;
 let elemTransform : HTMLDivElement;
@@ -11,7 +13,12 @@ let zoomIndex        : number = 0; // positive for zoom in, negative for zoom ou
 
 let position : Vector = new Vector();
 
+//#endregion 󰫧 VARIABLES.
+
 const _board = {
+	settings: {
+	},
+
 	/**
 	 * Teleports user view to location.
 	 * @param x 
@@ -56,8 +63,10 @@ const _board = {
 	},
 };
 
+//#region // 󰙨 TESTING.
+
 const BLOCK_SPREAD = 1000;
-const BLOCK_COUNT = 100;
+const BLOCK_COUNT = 2000;
 
 const COLORS : Array<string> = [
 	"#ca563e",
@@ -82,15 +91,17 @@ const COLORS : Array<string> = [
 
 function create_block(parent: HTMLDivElement) {
 	let div = document.createElement("div");
-
-	div.style.backgroundColor = COLORS[Math.floor(Math.random() * COLORS.length)] + "33";
+	
+	div.style.backgroundColor = COLORS[Math.floor(Math.random() * COLORS.length)] + "FF";
 	div.setAttribute("class", "test");
 	//div.innerText = "bingus";
 	div.style.top = (Math.round(Math.random() * BLOCK_SPREAD - (BLOCK_SPREAD / 2)) + "px");
 	div.style.left = (Math.round(Math.random() * BLOCK_SPREAD - (BLOCK_SPREAD / 2)) + "px");
-
+	
 	parent.appendChild(div);
 }
+
+//#endregion 󰙨 TESTING.
 
 export function init(): void {
 	// ELEMENTS.
@@ -115,6 +126,8 @@ export function init(): void {
 
 	on_window_resize();
 }
+
+//#region // 󱐋 EVENTS.
 
 const on_window_resize = (_evt?: UIEvent): void => {
 };
@@ -143,6 +156,10 @@ function on_drag(evt: MouseEvent): void {
 		set_position(position);
 	}
 }
+
+//#endregion 󱐋 EVENTS.
+
+//#region // 󰁌 ZOOM & POSITION.
 
 /**
  * Get processed zoom value from index multiplied by "away" or "towards" deltas.
@@ -184,6 +201,7 @@ const set_zoom = (zoom: number, x: number = 0, y: number = 0): void => {
 
 	// add offset onto position.
 	_board.set_zoom_index(get_zoom_index(zoom));
+	// gotta use round or else it'll anti-alias.
 	elemContent.style.transform = `translate(${Math.round(_zOffset.x)}px, ${Math.round(_zOffset.y)}px) scale(${zoom})`;
 };
 
@@ -218,14 +236,16 @@ function set_position(pos: Position): void;
  */
 function set_position(x: number | Vector | Position, y?: number): void {
 	if(x instanceof Vector || typeof(x) === "object") {
-		elemTransform.style.left = `${x.x}px`;
-		elemTransform.style.top  = `${x.y}px`;
+		elemTransform.style.left = `${Math.round(x.x)}px`;
+		elemTransform.style.top  = `${Math.round(x.y)}px`;
 		return;
 	}
 	
-	elemTransform.style.left = `${x}px`;
-	elemTransform.style.top  = `${y!}px`;
+	elemTransform.style.left = `${Math.round(x)}px`;
+	elemTransform.style.top  = `${Math.round(y!)}px`;
 }
+
+//#endregion 󰁌 ZOOM & POSITION.
 
 declare global {
 	var board: typeof _board;
