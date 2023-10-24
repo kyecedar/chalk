@@ -37,12 +37,6 @@ body {
 /*#region // TITLEBAR.*/
 
 #window-titlebar {
-	-webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 	z-index: 9999;
 	height: var(--window-titlebar-height);
 	user-select: none;

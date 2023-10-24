@@ -5,11 +5,18 @@ let elemCenterer  : HTMLDivElement;
 let elemTransform : HTMLDivElement;
 let elemContent   : HTMLDivElement;
 
-let zoomMin          : number = 0.20;
+let elemZoomOut  : HTMLButtonElement;
+let elemZoomIn   : HTMLButtonElement;
+let elemZoomText : HTMLDivElement;
+
+let zoomMin          : number = 0.05;
 let zoomMax          : number = 5.00;
 let zoomTowardsDelta : number = 1.00;
 let zoomAwayDelta    : number = 0.20;
 let zoomIndex        : number = 0; // positive for zoom in, negative for zoom out.
+let zoomTextDecimals : number = 2; // how many decimal places are left in the zoom number text.
+
+let isMiddleMouseDown : boolean = false;
 
 let position : Vector = new Vector();
 
@@ -30,6 +37,13 @@ const _board = {
 
 	hovered: (): boolean => {
 		return elemBoard.matches(":hover");
+	},
+
+	zoom_in: (): void => {
+		return set_zoom(get_zoom(get_zoom_index() + 1), );
+	},
+	zoom_out: (): void => {
+		return set_zoom(get_zoom(get_zoom_index() - 1));
 	},
 
 	get_zoom_index_min: (): number => {
@@ -65,8 +79,8 @@ const _board = {
 
 //#region // 󰙨 TESTING.
 
-const BLOCK_SPREAD = 1000;
-const BLOCK_COUNT = 2000;
+const BLOCK_SPREAD = 10000;
+const BLOCK_COUNT = 4000;
 
 const COLORS : Array<string> = [
 	"#ca563e",
@@ -110,12 +124,20 @@ export function init(): void {
 	elemTransform = (document.getElementById("board-transform") as HTMLDivElement)!;
 	elemContent = (document.getElementById("board-content") as HTMLDivElement)!;
 
+	elemZoomOut = (document.querySelector("#board-zoom .out") as HTMLButtonElement)!;
+	elemZoomIn = (document.querySelector("#board-zoom .in") as HTMLButtonElement)!;
+	elemZoomText = (document.querySelector("#board-zoom .text") as HTMLDivElement)!;
+
 	for(let i = 0; i < BLOCK_COUNT; ++i) create_block(elemContent);
 
 	// LISTENERS.
 	elemBoard.addEventListener("resize", on_window_resize);
 	input.add_wheel_callback(on_zoom);
 	input.add_mouse_callback("mousemove", on_drag);
+	input.add_mouse_callback("buttondown", on_mouse_down);
+	input.add_mouse_callback("buttonup", on_mouse_up);
+	elemZoomOut.onclick = _board.zoom_out;
+	elemZoomIn.onclick = _board.zoom_in;
 	
 	// DEFAULTS.
 	_board.set_zoom_min(zoomMin);
@@ -123,6 +145,8 @@ export function init(): void {
 	_board.set_zoom_index(zoomIndex);
 	_board.set_zoom_towards_delta(zoomTowardsDelta);
 	_board.set_zoom_away_delta(zoomAwayDelta);
+
+	elemZoomText.innerText = `${get_zoom().toFixed(zoomTextDecimals)}x`;
 
 	on_window_resize();
 }
@@ -134,23 +158,36 @@ const on_window_resize = (_evt?: UIEvent): void => {
 
 let _deltaY    : -1 | 1;
 let _cRect     : DOMRect; // content rect.
+let _mRect     : DOMRect; // "middle" rect. (centerer)
 const _mOffset : Vector = new Vector(); // mouse offset.
 function on_zoom(evt: WheelEvent): void {
+	if(!_board.hovered()) return;
+
 	if(evt.deltaY > 0) _deltaY = -1;
 	else if(evt.deltaY < 0) _deltaY = 1;
 	else return;
 
 	_cRect = elemContent.getBoundingClientRect();
 
-	// subtract centerer position to mouse to get mouse offset from center.
+	console.log(_cRect);
+
 	_mOffset.x = input.mouse.pos.x - _cRect.x;
 	_mOffset.y = input.mouse.pos.y - _cRect.y;
 
 	set_zoom(get_zoom(zoomIndex + _deltaY), _mOffset.x, _mOffset.y);
 }
 
+const on_mouse_down = (_evt: MouseEvent): void => {
+	if(!_board.hovered()) return;
+	isMiddleMouseDown = input.mouse.middle;
+};
+
+const on_mouse_up = (): void => {
+	if(!input.mouse.middle) isMiddleMouseDown = false;
+};
+
 function on_drag(evt: MouseEvent): void {
-	if(input.mouse.middle) {
+	if(isMiddleMouseDown) {
 		position.x += evt.movementX
 		position.y += evt.movementY;
 		set_position(position);
@@ -188,8 +225,13 @@ const _zOffset  : Vector = new Vector(); // zoomed mouse offset.
  * @param x Offset from center.
  * @param y Offset from center.
  */
-const set_zoom = (zoom: number, x: number = 0, y: number = 0): void => {
-	// SUMMARY: keep distance relative to position while scaling.
+const set_zoom = (zoom: number, x?: number, y?: number): void => {
+	if(x === undefined || y === undefined) {
+		_mRect = elemCenterer.getBoundingClientRect();
+		_cRect = elemContent.getBoundingClientRect();
+		x = x || _mRect.x - _cRect.x;
+		y = y || _mRect.y - _cRect.y;
+	}
 
 	zoom = Math.min(Math.max(get_zoom(get_zoom_index(zoom)), zoomMin), zoomMax);
 	if(zoom == get_zoom()) return;
@@ -199,10 +241,10 @@ const set_zoom = (zoom: number, x: number = 0, y: number = 0): void => {
 	_zOffset.x += x - (x * _zoomChange);
 	_zOffset.y += y - (y * _zoomChange);
 
-	// add offset onto position.
 	_board.set_zoom_index(get_zoom_index(zoom));
 	// gotta use round or else it'll anti-alias.
 	elemContent.style.transform = `translate(${Math.round(_zOffset.x)}px, ${Math.round(_zOffset.y)}px) scale(${zoom})`;
+	elemZoomText.innerText = `${zoom.toFixed(zoomTextDecimals)}x`;
 };
 
 function get_position(x: number, y: number): Position;

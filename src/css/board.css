@@ -7,36 +7,6 @@
 	height: 100%;
 }
 
-#board-mode {
-	z-index: 9999;
-	display: flex;
-	flex-direction: row;
-	position: absolute;
-	margin: var(--window-content-margin);
-	padding: var(--blurb-padding);
-	top: 0;
-	left: 0;
-	gap: var(--board-mode-gap);
-	align-items: center;
-	/* https://stackoverflow.com/a/75914371 */
-	background-color: color-mix(in srgb, var(--background), transparent var(--blurb-background-opacity));
-	backdrop-filter: blur(var(--blurb-background-blur));
-	border-radius: var(--board-mode-border-radius);
-	font-size: 11px;
-	font-weight: 700;
-	max-height: 10px;
-}
-
-#board-mode-icon {
-	--icon: url(/src/assets/board/mode-normal.svg);
-	width: 10px;
-	height: 10px;
-}
-
-#board-mode-text {
-	transform: translate(0px, 0px);
-}
-
 #board-transform {
 	position: absolute;
 }
@@ -46,6 +16,91 @@
 	width: 10px;
 	height: 10px;
 	background-color: black;
+}
+
+#board-mode {
+	--background: #FFFFFF;
+	z-index: 9999;
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	margin: var(--window-content-margin);
+	padding: var(--blurb-padding);
+	left: 0;
+	bottom: 0;
+	gap: var(--board-mode-gap);
+	align-items: center;
+	/* https://stackoverflow.com/a/75914371 */
+	background-color: color-mix(in srgb, var(--background), transparent var(--blurb-background-opacity));
+	backdrop-filter: blur(var(--blurb-background-blur));
+	border-radius: var(--board-mode-border-radius);
+	font-size: var(--board-mode-font-size);
+	font-weight: 700;
+	max-height: var(--board-mode-font-size);
+}
+
+#board-mode-icon {
+	--background: transparent;
+	--icon: url(/src/assets/board/mode-normal.svg);
+	width: var(--board-mode-font-size);
+	height: var(--board-mode-font-size);
+}
+
+#board-mode-text {
+	transform: translate(0px, 0px);
+}
+
+#board-zoom {
+	--background: #FFFFFF;
+	position: absolute;
+	display: flex;
+	flex-direction: row;
+	gap: var(--board-zoom-gap);
+	margin: var(--window-content-margin);
+	padding: var(--blurb-padding);
+	right: 0;
+	bottom: 0;
+	max-height: var(--board-zoom-height);
+	/* https://stackoverflow.com/a/75914371 */
+	background-color: color-mix(in srgb, var(--background), transparent var(--blurb-background-opacity));
+	backdrop-filter: blur(var(--blurb-background-blur));
+	border-radius: var(--board-zoom-border-radius);
+	align-items: center;
+	text-align: center;
+}
+
+#board-zoom .out,
+#board-zoom .in {
+	--background: transparent;
+	width  : var(--board-zoom-height);
+	height : var(--board-zoom-height);
+	border-radius: var(--board-zoom-border-radius);
+	cursor: pointer;
+}
+
+#board-zoom .out:hover,
+#board-zoom .in:hover {
+	--color: #FFFFFF;
+	--background: var(--color-key);
+}
+
+#board-zoom .out {
+	--icon: url(/src/assets/board/zoom-out.svg);
+}
+
+#board-zoom .in {
+	--icon: url(/src/assets/board/zoom-in.svg);
+}
+
+#board-zoom .levels {
+	width  : var(--board-zoom-level-width);
+	height : 100%;
+}
+
+#board-zoom .text {
+	min-width: var(--board-zoom-text-min-width);
+	font-size: var(--board-zoom-font-size);
+	font-weight: 700;
 }
 
 .test {
