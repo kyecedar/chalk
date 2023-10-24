@@ -1,15 +1,3 @@
-:root {
-	--window-titlebar-drag-margin: 4px;
-	--window-title-font-size: 16px;
-	--window-titlebar-margin: 1px;
-	--window-title-margin: 6px;
-	--window-titlebar-button-width: 40px;
-	--window-titlebar-button-height: 30px;
-	--window-titlebar-height: calc(var(--window-titlebar-button-height) + var(--window-titlebar-margin) * 2);
-
-	--user-select: none;
-}
-
 html {
 	width: 100vw;
 	height: 100vh;
@@ -24,8 +12,7 @@ body {
 	flex-direction: column;
 }
 
-/* LOADING SCREEN.
-*/
+/*#region // LOADING SCREEN.*/
 
 #loading-screen {
 	pointer-events: none;
@@ -45,8 +32,9 @@ body {
 	pointer-events: auto;
 }
 
-/* TITLEBAR.
-*/
+/*#endregion LOADING SCREEN.*/
+
+/*#region // TITLEBAR.*/
 
 #window-titlebar {
 	-webkit-touch-callout: none;
@@ -103,63 +91,30 @@ body {
 	height: var(--window-titlebar-button-height);
 }
 
-#window-titlebar button::before {
-	z-index: -2;
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	content: "";
-	width: 100%;
-	height: 100%;
+#window-titlebar button:hover {
+	--color: #FFFFFF;
+	--background: var(--color-key);
 }
 
-#window-titlebar button::after {
-	z-index: 0;
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	content: "";
-	width: 100%;
-	height: 100%;
-	mask-size: 100%;
-	-webkit-mask-size: 100%;
-	background: black;
+#window-titlebar .minimize {
+	--icon: url(/src/assets/window/minimize.svg);
 }
 
-#window-titlebar button:hover::after {
-	background: white;
+#window-titlebar .maximize {
+	--icon: url(/src/assets/window/maximize.svg);
 }
 
-#window-titlebar button:hover::before {
-	background: black;
+#window-titlebar[maximized] .maximize {
+	--icon: url(/src/assets/window/unmaximize.svg);
 }
 
-#window-titlebar .minimize::after {
-	mask-image: url(/src/assets/window/minimize.svg);
-	-webkit-mask-image: url(/src/assets/window/minimize.svg);
+#window-titlebar .close {
+	--icon: url(/src/assets/window/close.svg);
 }
 
-#window-titlebar .maximize::after {
-	mask-image: url(/src/assets/window/maximize.svg);
-	-webkit-mask-image: url(/src/assets/window/maximize.svg);
-}
+/*#endregion TITLEBAR.*/
 
-#window-titlebar[maximized] .maximize::after {
-	mask-image: url(/src/assets/window/unmaximize.svg);
-	-webkit-mask-image: url(/src/assets/window/unmaximize.svg);
-}
-
-#window-titlebar .close::after {
-	mask-image: url(/src/assets/window/close.svg);
-	-webkit-mask-image: url(/src/assets/window/close.svg);
-}
-
-/* CONTENT.
-*/
+/*#region // CONTENT.*/
 
 #window-content {
 	position: relative;
@@ -167,3 +122,5 @@ body {
 	flex-grow: 1;
 	background-color: white;
 }
+
+/*#endregion CONTENT.*/

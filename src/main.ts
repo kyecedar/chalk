@@ -17,10 +17,12 @@ import * as modBoard from "./modules/board";
 	// });
 // }
 
-let elemRoot: HTMLHtmlElement;
+declare global {
+	var elemRoot: HTMLHtmlElement;
+}
 
 window.addEventListener("DOMContentLoaded", () => {
-	elemRoot = (document.querySelector(":root") as HTMLHtmlElement)!;
+	globalThis.elemRoot = (document.querySelector(":root") as HTMLHtmlElement)!;
 	appWindow.show();
 
 	// prevent refresh.
